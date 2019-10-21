@@ -42,7 +42,8 @@ resource "aws_vpc_peering_connection" "pc" {
   }
 
   tags = {
-    tags = local.common_tags
+    name = local.common_tags
+    owner= local.common_tags
   }
 }
 
