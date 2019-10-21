@@ -42,7 +42,7 @@ resource "aws_vpc_peering_connection" "pc" {
   }
 
   tags = {
-    Name = "vpc-east to vpc-west VPC peering"
+    tags = local.common_tags
   }
 }
 
