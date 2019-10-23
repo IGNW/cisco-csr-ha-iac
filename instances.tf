@@ -22,10 +22,10 @@ resource "aws_instance" "web" {
   instance_type = "t2.micro"
 
   tags = {
-     Project, "CSR HA",
-    Client, "cisco",
-    Owner, "tomc@ignw.io",
-    Name, "vpc-east to vpc-west VPC peering"
+    Project = "CSR HA",
+    Client  = "cisco",
+    Owner   = "tomc@ignw.io",
+    Name    = "vpc-east to vpc-west VPC peering"
     
   }
 }
