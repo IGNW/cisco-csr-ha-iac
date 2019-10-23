@@ -26,6 +26,7 @@ resource "aws_instance" "web" {
     Client  = "cisco",
     Owner   = "tomc@ignw.io",
     Name    = "vpc-east to vpc-west VPC peering"
+    Team    = "DevOps"
     
   }
 }
