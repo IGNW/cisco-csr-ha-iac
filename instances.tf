@@ -21,7 +21,10 @@ resource "aws_instance" "web" {
   ami           = "${data.aws_ami.ubuntu.id}"
   instance_type = "t2.micro"
 
-  tags = {
-    Name = "HelloWorld"
-  }
+ tags = "${merge(
+    local.common_tags,
+    map(
+      "Altname", "Test"
+    )
+  )}"
 }
