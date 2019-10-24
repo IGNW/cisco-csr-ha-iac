@@ -25,7 +25,7 @@ resource "aws_instance" "web" {
     Project = "CSR HA",
     Client  = "cisco",
     Owner   = "tomc@ignw.io",
-    Name    = "vpc-east to vpc-west VPC peering"
+    Name    = "vpc-east to vpc-west VPC peering",
     Team    = "DevOps"
     
   }
