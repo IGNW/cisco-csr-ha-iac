@@ -29,10 +29,10 @@
 //   - kubernetes.io/cluster/<name>: Set to <cluster_id>, required for OpenShift >= 3.7
 //  The syntax below is ugly, but needed as we are using dynamic key names.
 locals {
-  common_tags = "${map(
-    "Project", "CSR HA",
-    "Client", "cisco",
-    "Owner", "tomc@ignw.io",
-    "Name", "vpc-east to vpc-west VPC peering"
-  )}"
+  #common_tags = "${map(
+  #  "Project", "CSR HA",
+  #  "Client", "cisco",
+  #  "Owner", "tomc@ignw.io",
+  #  "Name", "vpc-east to vpc-west VPC peering"
+  #)}"
 }

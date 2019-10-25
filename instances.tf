@@ -24,6 +24,14 @@ data "aws_ami" "ubuntu" {
   }
 }
 
+resource "aws_security_group" "ssh_in" {
+  description = "Highly insecure SG permitting SSH"
+  name        = "allow-ssh-sg"
+  vpc_id      = "${module.vpc-west.vpc_id}"
+}
+
+
+
 resource "aws_instance" "web" {
   ami           = "${data.aws_ami.ubuntu.id}"
   instance_type = "t2.micro"
