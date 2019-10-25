@@ -15,6 +15,15 @@ data "aws_ami" "ubuntu" {
   }
 
   owners = ["099720109477"] # Canonical
+
+  tags = {
+    Project = "CSR HA",
+    Client  = "cisco",
+    Owner   = "tomc@ignw.io",
+    Name    = "vpc-east to vpc-west VPC peering",
+    Team    = "DevOps"
+    
+  }
 }
 
 resource "aws_instance" "web" {
