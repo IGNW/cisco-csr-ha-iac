@@ -18,9 +18,7 @@ data "aws_ami" "ubuntu" {
 
   tags = {
     Project = "CSR HA",
-    Client  = "cisco",
     Owner   = "tomc@ignw.io",
-    Name    = "vpc-east to vpc-west VPC peering",
     Team    = "DevOps"
     
   }
@@ -32,9 +30,7 @@ resource "aws_instance" "web" {
 
   tags = {
     Project = "CSR HA",
-    Client  = "cisco",
     Owner   = "tomc@ignw.io",
-    Name    = "vpc-east to vpc-west VPC peering",
     Team    = "DevOps"
     
   }
