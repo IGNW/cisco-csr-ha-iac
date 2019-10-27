@@ -6,7 +6,7 @@ module "vpc-west" {
 
   cidr = "10.0.0.0/16"
 
-  azs            = ["us-east-1a", "us-east-1b"]
+  azs            = ["us-west-2a", "us-west-2b"]
   public_subnets = ["10.0.0.0/24", "10.0.1.0/24"]
 
   enable_dns_hostnames = true
@@ -21,7 +21,7 @@ module "vpc-east" {
 
   cidr = "10.1.0.0/16"
 
-  azs            = ["us-east-1a", "us-east-1b"]
+  azs            = ["us-west-2a", "us-west-2b"]
   public_subnets = ["10.1.0.0/24", "10.1.1.0/24"]
 
   enable_dns_hostnames = true
