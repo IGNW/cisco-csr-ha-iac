@@ -1,2 +1,4 @@
 scratch.tf
 scratch.json
+terraform.tfstate
+.terraform
