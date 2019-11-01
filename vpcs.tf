@@ -1,8 +1,8 @@
-module "vpc-west" {
+module "vpc-west_local" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "2.17.0"
 
-  name = "terraform-vpc-west"
+  name = "terraform-vpc-west_local"
 
   cidr = "10.0.0.0/16"
 
@@ -13,11 +13,11 @@ module "vpc-west" {
   enable_dns_support   = true
 }
 
-module "vpc-east" {
+module "vpc-east_local" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "2.17.0"
 
-  name = "terraform-vpc-east"
+  name = "terraform-vpc-east_local"
 
   cidr = "10.1.0.0/16"
 
@@ -29,8 +29,8 @@ module "vpc-east" {
 }
 
 resource "aws_vpc_peering_connection" "pc" {
-  peer_vpc_id = module.vpc-west.vpc_id
-  vpc_id      = module.vpc-east.vpc_id
+  peer_vpc_id = module.vpc-west_local.vpc_id
+  vpc_id      = module.vpc-east_local.vpc_id
   auto_accept = true
 
   accepter {
@@ -42,14 +42,14 @@ resource "aws_vpc_peering_connection" "pc" {
   }
 
   tags = {
-    Name = "vpc-east to vpc-west VPC peering"
+    Name = "vpc-east_local to vpc-west_local VPC peering"
   }
 }
 
 resource "aws_route" "vpc-peering-route-east" {
   count                     = 2
-  route_table_id            = module.vpc-east.public_route_table_ids[0]
-  destination_cidr_block    = module.vpc-west.public_subnets_cidr_blocks[count.index]
+  route_table_id            = module.vpc-east_local.public_route_table_ids[0]
+  destination_cidr_block    = module.vpc-west_local.public_subnets_cidr_blocks[count.index]
   vpc_peering_connection_id = aws_vpc_peering_connection.pc.id
 }
 
