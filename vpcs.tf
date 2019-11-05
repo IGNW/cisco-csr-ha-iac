@@ -55,7 +55,7 @@ resource "aws_route" "vpc-peering-route-east" {
 
 resource "aws_route" "vpc-peering-route-west" {
   count                     = 2
-  route_table_id            = module.vpc-west.public_route_table_ids[0]
-  destination_cidr_block    = module.vpc-east.public_subnets_cidr_blocks[count.index]
+  route_table_id            = module.vpc-west_local.public_route_table_ids[0]
+  destination_cidr_block    = module.vpc-east_local.public_subnets_cidr_blocks[count.index]
   vpc_peering_connection_id = aws_vpc_peering_connection.pc.id
 }
