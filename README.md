@@ -12,10 +12,10 @@ Notes:
   - `Error launching source instance: UnauthorizedOperation: You are not authorized to perform this operation. Encoded authorization failure message:`
   - Decoded error message shows an unknown access key attempting authorization. Access key does not belong to anyone in IGNW org.
 
-# Remeditaion:
+# Remediation:
 
 - Moved project from Terraform Cloud to local dev; same error
-- 
+- Detached my user from [EC2-Tagging policy](https://console.aws.amazon.com/iam/home?region=us-west-2#/policies/arn:aws:iam::312506926764:policy/Force_Resource_Tagging$jsonEditor?section=attached_entities) (`Force_Resource_Tagging`)-- **WORKED**
 
 
 
