@@ -1,12 +1,12 @@
 # Create a new instance of the latest Ubuntu 14.04 on an
 # t2.micro node with an AWS Tag naming it "HelloWorld"
 
-data "aws_ami" "cisco" {
+data "aws_ami" "ubuntu" {
   most_recent = true
 
   filter {
     name   = "name"
-    values = ["aws-marketplace/cisco-CSR-.16.12.01a-BYOL-HVM-2"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-20191002"]
   }
 
   filter {
@@ -14,7 +14,7 @@ data "aws_ami" "cisco" {
     values = ["hvm"]
   }
 
-  owners = ["679593333241"] # Cisco
+  owners = ["099720109477"] # Canonical
 
   tags = {
     Project = "CSR HA",
