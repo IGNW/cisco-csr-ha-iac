@@ -3,7 +3,19 @@ Two VPCS peered to allow Active/Passive HA between Instances
 
 Notes:
 
-- SWitching to `local dev` on this branch. `Master` contains work for Terraform Cloud, ~~which is currently being remediated with a Hashicorp ticket.~~ which I  will leave in place until the bad access key issue is solved. Remediation efforts will continue on the `local_dev` branch, with the iterations on my local machine .
+- Switching to `local dev` on this branch. `Master` contains work for Terraform Cloud, ~~which is currently being remediated with a Hashicorp ticket.~~ which I  will leave in place until the bad access key issue is solved. Remediation efforts will continue on the `local_dev` branch, with the iterations on my local machine .
+
+# Current Issue
+
+- Unable to stand up an ec2 via Terraform. Instance can be created manually (with proper tagging).
+- Error message: 
+  - `Error launching source instance: UnauthorizedOperation: You are not authorized to perform this operation. Encoded authorization failure message:`
+  - Decoded error message shows an unknown access key attempting authorization. Access key does not belong to anyone in IGNW org.
+
+# Remeditaion:
+
+- Moved project from Terraform Cloud to local dev; same error
+- 
 
 
 

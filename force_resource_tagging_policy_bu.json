@@ -1,3 +1,5 @@
+#### arn:aws:iam::312506926764:policy/Force_Resource_Tagging
+
 {
     "Version": "2012-10-17",
     "Statement": [
