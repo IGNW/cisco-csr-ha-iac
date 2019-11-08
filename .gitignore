@@ -2,3 +2,4 @@ scratch.tf
 terraform.tfstate
 terraform.tfstate.backup
 .terraform
+scratch.json
