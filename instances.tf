@@ -42,8 +42,8 @@ resource "aws_security_group" "ssh_in" {
 
 
 
-resource "aws_instance" "csr" {
-  ami           = "${data.aws_ami.csr.id}"
+resource "aws_instance" "csr_west" {
+  ami           = "${data.aws_ami.csr_west.id}"
   instance_type = "t2.medium"
 
   tags = {
