@@ -1,7 +1,7 @@
 # Create a new instance of the latest Ubuntu 14.04 on an
 # t2.micro node with an AWS Tag naming it "HelloWorld"
 
-data "aws_ami" "csr" {
+data "aws_ami" "csr_west" {
   most_recent = true
 
   filter {
@@ -26,7 +26,7 @@ data "aws_ami" "csr" {
 
 resource "aws_security_group" "ssh_in" {
   description = "Highly insecure SG permitting SSH"
-  name        = "allow-ssh-sg"
+  name        = "allow-ssh-sg_west"
   vpc_id      = "${module.vpc-west.vpc_id}"
 
   ingress {
