@@ -44,7 +44,7 @@ resource "aws_security_group" "ssh_in" {
 
 resource "aws_instance" "csr" {
   ami           = "${data.aws_ami.csr.id}"
-  instance_type = "t2.micro"
+  instance_type = "t2.medium"
 
   tags = {
     Project = "CSR HA",
