@@ -18,7 +18,7 @@ Module to HA two instances of a CSR 1000v.
 
 # Current State
 
-Two VPCs (East and West) have been established, along with VPC peering between and Instance_West of the CSR 1000v. (Note: Peering is not necessary for this phase but has been added in advance.)
+Two VPCs (East and West) have been established, along with VPC peering between the two VPCs. Instance_West of the CSR 1000v has been stood up. (Note: Peering is not necessary for this phase but has been added in advance.)
  
 # TODO
 
@@ -43,4 +43,6 @@ Current development is in Terraform Cloud at the following workspace:
 
 https://app.terraform.io/app/IGNW-TEST/workspaces/cisco-csr-ha-iac/runs
 
-All code is in the current repo
+All code is in the current repo:
+
+https://github.com/IGNW/cisco-csr-ha-iac
