@@ -45,10 +45,11 @@ resource "aws_security_group" "ssh_in" {
 resource "aws_instance" "csr_west" {
   ami           = "${data.aws_ami.csr_west.id}"
   instance_type = "t2.medium"
+  key_name      = "csr1000v"
 
   tags = {
     Project = "CSR HA",
-    Owner   = "tomc@ignw.io",
+    Owner   = "tylerw@ignw.io",
     Team    = "DevOps"
     
   }
