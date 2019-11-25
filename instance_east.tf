@@ -24,24 +24,6 @@ data "aws_ami" "csr_east" {
   }
 }
 
-resource "aws_security_group" "ssh_in" {
-  description = "Highly insecure SG permitting SSH"
-  name        = "allow-ssh-sg_east"
-  vpc_id      = "${module.vpc-east.vpc_id}"
-
-  ingress {
-    # TLS (change to whatever ports you need)
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    # Please restrict your ingress to only necessary IPs and ports.
-    # Opening to 0.0.0.0/0 can lead to security vulnerabilities.
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-
-
 resource "aws_instance" "csr_east" {
   ami           = "${data.aws_ami.csr_east.id}"
   instance_type = "t2.medium"
