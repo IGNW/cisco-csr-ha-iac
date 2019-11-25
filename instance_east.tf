@@ -28,6 +28,7 @@ resource "aws_instance" "csr_east" {
   ami           = "${data.aws_ami.csr_east.id}"
   instance_type = "t2.medium"
   key_name      = "csr1000v"
+  name          = "csr1000vEast"
 
   tags = {
     Project = "CSR HA",
