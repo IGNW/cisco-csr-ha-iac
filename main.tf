@@ -1,35 +1,46 @@
-data "aws_vpc" "default" {
-  default = true
+resource "aws_vpc" "csr1000vvpc" {
+  cidr_block       = "10.0.0.0/16"
+  instance_tenancy = "dedicated"
+
+  tags = {
+    Name = "csr1000vvpc"
+  }
+}
+
+resource "aws_subnet" "sub1" {
+  vpc_id            = "${aws_vpc.csr1000vvpc}"
+  availability_zone = "us-west-2a"
+  cidr_block        = "${cidrsubnet(aws_vpc.csr1000vvpc.cidr_block, 4, 1)}"
 }
 
 resource "aws_network_interface" "csr1000v1failover" {
-  subnet_id = data.aws_vpc.default.id
+  subnet_id = aws_subnet.sub1
   security_groups = ["${module.security_group_failover.this_security_group_id}"]
 }
 
 resource "aws_network_interface" "csr1000v2failover" {
-  subnet_id = data.aws_vpc.default.id
+  subnet_id = aws_subnet.sub1
   security_groups = ["${module.security_group_failover.this_security_group_id}"]
 }
 
 resource "aws_network_interface" "csr1000v1inside" {
-  subnet_id = data.aws_vpc.default.id
+  subnet_id = aws_subnet.sub1
   security_groups = ["${module.security_group_inside.this_security_group_id}"]
 
 }
 
 resource "aws_network_interface" "csr1000v2inside" {
-  subnet_id = data.aws_vpc.default.id
+  subnet_id = aws_subnet.sub1
   security_groups = ["${module.security_group_inside.this_security_group_id}"]
 }
 
 resource "aws_network_interface" "csr1000v1outside" {
-  subnet_id = data.aws_vpc.default.id
+  subnet_id = aws_subnet.sub1
   security_groups = ["${module.security_group_outside.this_security_group_id}"]
 }
 
 resource "aws_network_interface" "csr1000v2outside" {
-  subnet_id = data.aws_vpc.default.id
+  subnet_id = aws_subnet.sub1
   security_groups = ["${module.security_group_outside.this_security_group_id}"]
 }
 
@@ -39,7 +50,7 @@ module "security_group_outside" {
 
   name        = "csroutside"
   description = "Security group for public interface of csr1000v"
-  vpc_id      = data.aws_vpc.default.id
+  vpc_id      = aws_vpc.csr1000vvpc
 
   ingress_cidr_blocks = ["0.0.0.0/0"]
   ingress_rules       = ["https-443-tcp", "http-80-tcp", "all-icmp"]
@@ -52,9 +63,9 @@ module "security_group_inside" {
 
   name        = "csrinside"
   description = "Security group for private interface of csr1000v"
-  vpc_id      = data.aws_vpc.default.id
+  vpc_id      = aws_vpc.csr1000vvpc
 
-  ingress_cidr_blocks = ["${data.aws_vpc.default.cidr_block}"]
+  ingress_cidr_blocks = ["${aws_vpc.csr1000vvpc.cidr_block}"]
   ingress_rules       = ["all-all"]
   egress_rules        = ["all-all"]
 }
@@ -65,23 +76,23 @@ module "security_group_failover" {
 
   name        = "csrfailover"
   description = "Security group for private interface of csr1000v"
-  vpc_id      = data.aws_vpc.default.id
+  vpc_id      = aws_vpc.csr1000vvpc
 
-  ingress_cidr_blocks = ["${data.aws_vpc.default.cidr_block}"]
+  ingress_cidr_blocks = ["${aws_vpc.csr1000vvpc.cidr_block}"]
   ingress_with_cidr_blocks = [
     {
       from_port   = 4789
       to_port     = 4789
       protocol    = "udp"
       description = "Failover udp check between routers"
-      cidr_blocks = "${data.aws_vpc.default.cidr_block}"
+      cidr_blocks = "${aws_vpc.csr1000vvpc.cidr_block}"
     },
     {
       from_port   = 4790
       to_port     = 4790
       protocol    = "udp"
       description = "Failover udp check between routers"
-      cidr_blocks = "${data.aws_vpc.default.cidr_block}"
+      cidr_blocks = "${aws_vpc.csr1000vvpc.cidr_block}"
     },
   ]
   egress_rules        = ["all-all"]
