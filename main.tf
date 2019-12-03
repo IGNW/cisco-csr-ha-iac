@@ -105,8 +105,6 @@ module instance1 {
   instance_type          = "t2.micro"
   name = "csr1000v1"
   key_name = "csr1000v"
-  vpc_security_group_ids = []
-
   network_interface = [
     # Outside network Interface
     {
@@ -136,7 +134,6 @@ module instance2 {
   name = "csr1000v2"
   key_name = "csr1000v"
   instance_type          = "t2.micro"
-  vpc_security_group_ids = []
   network_interface = [
     # Outside network Interface
     {
