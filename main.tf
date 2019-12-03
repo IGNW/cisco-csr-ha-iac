@@ -4,32 +4,33 @@ data "aws_vpc" "default" {
 
 resource "aws_network_interface" "csr1000v1failover" {
   subnet_id = data.aws_vpc.default.id
-  security_groups = ["${module.security_group_failover.this_security_group_id.csrfailover}"]
+  security_groups = ["${module.security_group_failover.this_security_group_id}"]
 }
 
 resource "aws_network_interface" "csr1000v2failover" {
   subnet_id = data.aws_vpc.default.id
-  security_groups = ["${module.security_group_failover.this_security_group_id.csrfailover}"]
+  security_groups = ["${module.security_group_failover.this_security_group_id}"]
 }
 
 resource "aws_network_interface" "csr1000v1inside" {
   subnet_id = data.aws_vpc.default.id
-  security_groups = ["${module.security_group_inside.this_security_group_id.csrinside}"]
+  security_groups = ["${module.security_group_inside.this_security_group_id}"]
+
 }
 
 resource "aws_network_interface" "csr1000v2inside" {
   subnet_id = data.aws_vpc.default.id
-  security_groups = ["${module.security_group_inside.this_security_group_id.csrinside}"]
+  security_groups = ["${module.security_group_inside.this_security_group_id}"]
 }
 
 resource "aws_network_interface" "csr1000v1outside" {
   subnet_id = data.aws_vpc.default.id
-  security_groups = ["${module.security_group_outside.this_security_group_id.csroutside}"]
+  security_groups = ["${module.security_group_outside.this_security_group_id}"]
 }
 
 resource "aws_network_interface" "csr1000v2outside" {
   subnet_id = data.aws_vpc.default.id
-  security_groups = ["${module.security_group_outside.this_security_group_id.csroutside}"]
+  security_groups = ["${module.security_group_outside.this_security_group_id}"]
 }
 
 module "security_group_outside" {
