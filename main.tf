@@ -102,7 +102,6 @@ module instance1 {
   source                 = "terraform-aws-modules/ec2-instance/aws"
   version                = "~> 2.0"
   ami = "cisco-CSR-.16.12.01a-BYOL-HVM-2-624f5bb1-7f8e-4f7c-ad2c-03ae1cd1c2d3-ami-0a35891127a1b85e1.4" 
-  associate_public_ip_address = false
   instance_type          = "t2.micro"
   name = "csr1000v1"
   key_name = "csr1000v"
@@ -134,7 +133,6 @@ module instance2 {
   source                 = "terraform-aws-modules/ec2-instance/aws"
   version                = "~> 2.0"
   ami = "cisco-CSR-.16.12.01a-BYOL-HVM-2-624f5bb1-7f8e-4f7c-ad2c-03ae1cd1c2d3-ami-0a35891127a1b85e1.4" 
-  associate_public_ip_address = false
   name = "csr1000v2"
   key_name = "csr1000v"
   instance_type          = "t2.micro"
