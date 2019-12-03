@@ -50,7 +50,7 @@ module "security_group_outside" {
 
   name        = "csroutside"
   description = "Security group for public interface of csr1000v"
-  vpc_id      = aws_vpc.csr1000vvpc
+  vpc_id      = aws_vpc.csr1000vvpc.id
 
   ingress_cidr_blocks = ["0.0.0.0/0"]
   ingress_rules       = ["https-443-tcp", "http-80-tcp", "all-icmp"]
@@ -63,7 +63,7 @@ module "security_group_inside" {
 
   name        = "csrinside"
   description = "Security group for private interface of csr1000v"
-  vpc_id      = aws_vpc.csr1000vvpc
+  vpc_id      = aws_vpc.csr1000vvpc.id
 
   ingress_cidr_blocks = ["${aws_vpc.csr1000vvpc.cidr_block}"]
   ingress_rules       = ["all-all"]
@@ -76,7 +76,7 @@ module "security_group_failover" {
 
   name        = "csrfailover"
   description = "Security group for private interface of csr1000v"
-  vpc_id      = aws_vpc.csr1000vvpc
+  vpc_id      = aws_vpc.csr1000vvpc.id
 
   ingress_cidr_blocks = ["${aws_vpc.csr1000vvpc.cidr_block}"]
   ingress_with_cidr_blocks = [
