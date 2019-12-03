@@ -8,7 +8,7 @@ resource "aws_vpc" "csr1000vvpc" {
 }
 
 resource "aws_subnet" "sub1" {
-  vpc_id            = "${aws_vpc.csr1000vvpc}"
+  vpc_id            = "${aws_vpc.csr1000vvpc.id}"
   availability_zone = "us-west-2a"
   cidr_block        = "${cidrsubnet(aws_vpc.csr1000vvpc.cidr_block, 4, 1)}"
 }
