@@ -107,7 +107,7 @@ module instance1 {
   #ami = "cisco-CSR-.16.12.01a-BYOL-HVM-2-624f5bb1-7f8e-4f7c-ad2c-03ae1cd1c2d3-ami-0a35891127a1b85e1.4" 
   #ami = "ami-0fc7a3d5400f4619d"
   ami = "${data.aws_ami.csr1000v.id}"
-  instance_type          = "t2.micro"
+  instance_type          = "c4.large"
   name = "csr1000v1"
   key_name = "csr1000v"
   network_interface = [
@@ -155,7 +155,7 @@ module instance2 {
   ami = "${data.aws_ami.csr1000v.id}"
   name = "csr1000v2"
   key_name = "csr1000v"
-  instance_type          = "t2.micro"
+  instance_type          = "c4.large"
   network_interface = [
     # Outside network Interface
     {
