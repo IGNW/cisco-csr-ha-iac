@@ -6,6 +6,10 @@ resource "aws_vpc" "csr1000vvpc" {
   }
 }
 
+resource "aws_internet_gateway" "gw" {
+  vpc_id = "${aws_vpc.csr1000vvpc.id}"
+}
+
 resource "aws_subnet" "sub1" {
   vpc_id            = "${aws_vpc.csr1000vvpc.id}"
   availability_zone = "us-west-2a"
