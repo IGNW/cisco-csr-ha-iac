@@ -110,25 +110,26 @@ module instance1 {
   instance_type          = "c4.large"
   name = "csr1000v1"
   key_name = "csr1000v"
-  network_interface = [
-    # Outside network Interface
-    {
-      device_index = 0
-      network_interface_id  = aws_network_interface.csr1000v1outside.id
-    },
+  associate_public_ip_address = true
+  #network_interface = [
+  #  # Outside network Interface
+  #  {
+  #    device_index = 0
+  #    network_interface_id  = aws_network_interface.csr1000v1outside.id
+  #  },
 
-    # Inside network Interface
-    {
-      device_index = 1
-      network_interface_id  = aws_network_interface.csr1000v1inside.id
-    },
+  #  # Inside network Interface
+  #  {
+  #    device_index = 1
+  #    network_interface_id  = aws_network_interface.csr1000v1inside.id
+  #  },
 
-    # Failover network Interface
-    {
-      device_index = 2
-      network_interface_id  = aws_network_interface.csr1000v1failover.id
-    },
-  ]
+  #  # Failover network Interface
+  #  {
+  #    device_index = 2
+  #    network_interface_id  = aws_network_interface.csr1000v1failover.id
+  #  },
+  #]
   
 }
 
@@ -152,27 +153,28 @@ data "aws_ami" "csr1000v" {
 module instance2 {
   source                 = "terraform-aws-modules/ec2-instance/aws"
   version                = "~> 2.0"
+  associate_public_ip_address = true
   ami = "${data.aws_ami.csr1000v.id}"
   name = "csr1000v2"
   key_name = "csr1000v"
   instance_type          = "c4.large"
-  network_interface = [
-    # Outside network Interface
-    {
-      device_index = 0
-      network_interface_id  = aws_network_interface.csr1000v2outside.id
-    },
+  #network_interface = [
+  #  # Outside network Interface
+  #  {
+  #    device_index = 0
+  #    network_interface_id  = aws_network_interface.csr1000v2outside.id
+  #  },
 
-    # Inside network Interface
-    {
-      device_index = 1
-      network_interface_id  = aws_network_interface.csr1000v2inside.id
-    },
+  #  # Inside network Interface
+  #  {
+  #    device_index = 1
+  #    network_interface_id  = aws_network_interface.csr1000v2inside.id
+  #  },
 
-    # Failover network Interface
-    {
-      device_index = 2
-      network_interface_id  = aws_network_interface.csr1000v2failover.id
-    },
-  ]
+  #  # Failover network Interface
+  #  {
+  #    device_index = 2
+  #    network_interface_id  = aws_network_interface.csr1000v2failover.id
+  #  },
+  #]
 }
