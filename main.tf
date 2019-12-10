@@ -76,7 +76,7 @@ resource "aws_iam_role" "csr_role" {
 "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "VisualEditor0",
+            "Sid": "",
             "Effect": "Allow",
             "Action": [
                 "logs:CreateLogStream",
@@ -96,8 +96,7 @@ resource "aws_iam_role" "csr_role" {
                 "ec2:ReplaceRouteTableAssociation",
                 "logs:CreateLogGroup",
                 "logs:PutLogEvents"
-            ],
-            "Resource": "*"
+            ]
         }
     ]
 }
