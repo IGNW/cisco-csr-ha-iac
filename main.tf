@@ -100,7 +100,7 @@ resource "aws_iam_role" "csr_role" {
                 "ec2:ReplaceRouteTableAssociation",
                 "logs:CreateLogGroup",
                 "logs:PutLogEvents"
-            ],
+            ]
         }
     ]
 }
