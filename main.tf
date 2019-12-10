@@ -28,28 +28,39 @@ resource "aws_network_interface" "csr1000v1failover" {
 resource "aws_network_interface" "csr1000v2failover" {
   subnet_id = aws_subnet.sub1.id
   security_groups = ["${module.security_group_failover.this_security_group_id}"]
+  attachment {
+    instance     = join("", "${module.instance2.id}")
+    device_index = 1
+  }
 }
 
 resource "aws_network_interface" "csr1000v1inside" {
   subnet_id = aws_subnet.sub1.id
   security_groups = ["${module.security_group_inside.this_security_group_id}"]
-
+  attachment {
+    instance     = join("", "${module.instance1.id}")
+    device_index = 1
+  }
 }
 
 resource "aws_network_interface" "csr1000v2inside" {
   subnet_id = aws_subnet.sub1.id
   security_groups = ["${module.security_group_inside.this_security_group_id}"]
+  attachment {
+    instance     = join("", "${module.instance2.id}")
+    device_index = 1
+  }
 }
 
-resource "aws_network_interface" "csr1000v1outside" {
-  subnet_id = aws_subnet.sub1.id
-  security_groups = ["${module.security_group_outside.this_security_group_id}"]
-}
-
-resource "aws_network_interface" "csr1000v2outside" {
-  subnet_id = aws_subnet.sub1.id
-  security_groups = ["${module.security_group_outside.this_security_group_id}"]
-}
+#resource "aws_network_interface" "csr1000v1outside" {
+#  subnet_id = aws_subnet.sub1.id
+#  security_groups = ["${module.security_group_outside.this_security_group_id}"]
+#}
+#
+#resource "aws_network_interface" "csr1000v2outside" {
+#  subnet_id = aws_subnet.sub1.id
+#  security_groups = ["${module.security_group_outside.this_security_group_id}"]
+#}
 
 module "security_group_outside" {
   source  = "terraform-aws-modules/security-group/aws"
@@ -116,6 +127,7 @@ module instance1 {
   name = "csr1000v1"
   key_name = "csr1000v"
   associate_public_ip_address = true
+  security_groups = ["${module.security_group_outside.this_security_group_id}"]
   #network_interface = [
   #  # Outside network Interface
   #  {
@@ -164,6 +176,7 @@ module instance2 {
   key_name = "csr1000v"
   instance_type          = "c4.large"
   subnet_id = aws_subnet.sub1.id
+  security_groups = ["${module.security_group_outside.this_security_group_id}"]
   #network_interface = [
   #  # Outside network Interface
   #  {
