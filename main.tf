@@ -82,7 +82,7 @@ resource "aws_iam_role" "csr_role" {
         {
             "Sid": "",
             "Effect": "Allow",
-            "principals" {
+            "principals" = {
               "type" = "Service"
               "identifiers" = [
                 "ec2.amazonaws.com",
