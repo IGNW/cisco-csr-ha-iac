@@ -19,6 +19,7 @@ resource "aws_subnet" "sub1" {
 resource "aws_network_interface" "csr1000v1failover" {
   subnet_id = aws_subnet.sub1.id
   security_groups = ["${module.security_group_failover.this_security_group_id}"]
+  source_dest_check = false
   attachment {
     instance     = join("", "${module.instance1.id}")
     device_index = 1
@@ -28,6 +29,7 @@ resource "aws_network_interface" "csr1000v1failover" {
 resource "aws_network_interface" "csr1000v2failover" {
   subnet_id = aws_subnet.sub1.id
   security_groups = ["${module.security_group_failover.this_security_group_id}"]
+  source_dest_check = false
   attachment {
     instance     = join("", "${module.instance2.id}")
     device_index = 1
@@ -37,6 +39,7 @@ resource "aws_network_interface" "csr1000v2failover" {
 resource "aws_network_interface" "csr1000v1inside" {
   subnet_id = aws_subnet.sub1.id
   security_groups = ["${module.security_group_inside.this_security_group_id}"]
+  source_dest_check = false
   attachment {
     instance     = join("", "${module.instance1.id}")
     device_index = 2
@@ -46,6 +49,7 @@ resource "aws_network_interface" "csr1000v1inside" {
 resource "aws_network_interface" "csr1000v2inside" {
   subnet_id = aws_subnet.sub1.id
   security_groups = ["${module.security_group_inside.this_security_group_id}"]
+  source_dest_check = false
   attachment {
     instance     = join("", "${module.instance2.id}")
     device_index = 2
@@ -78,6 +82,9 @@ resource "aws_iam_role" "csr_role" {
         {
             "Sid": "",
             "Effect": "Allow",
+            "Principal": {
+               "Service": "ec2.amazonaws.com"
+            },
             "Action": [
                 "logs:CreateLogStream",
                 "cloudwatch:",
