@@ -93,7 +93,7 @@ resource "aws_iam_role" "csr_role" {
                 "logs.us-east-2.amazonaws.com",
                 "rds.amazonaws.com",
                 "s3.amazonaws.com",
-                "monitoring.rds.amazonaws.com",
+                "monitoring.rds.amazonaws.com"
               ]
             },
             "Action": [
