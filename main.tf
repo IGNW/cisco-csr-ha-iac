@@ -66,49 +66,47 @@ resource "aws_network_interface" "csr1000v2inside" {
 #  security_groups = ["${module.security_group_outside.this_security_group_id}"]
 #}
 
-#resource "aws_iam_instance_profile" "csr1000v" {
-#  name = "csr1000v"
-#  role = "${aws_iam_role.csr_role.name}"
-#}
-#
-#resource "aws_iam_role" "csr_role" {
-#  name = "csr1000v"
-#  path = "/"
-#
-#  assume_role_policy = <<EOF
-#{
-#"Version": "2012-10-17",
-#    "Statement": [
-#        {
-#            "Sid": "VisualEditor0",
-#            "Effect": "Allow",
-#            "Principal": {
-#              "Service": "ec2.amazonaws.com"
-#            },
-#            "Action": [
-#                "logs:CreateLogStream",
-#                "cloudwatch:",
-#                "s3:",
-#                "ec2:AssociateRouteTable",
-#                "ec2:CreateRoute",
-#                "ec2:CreateRouteTable",
-#                "ec2:DeleteRoute",
-#                "ec2:DeleteRouteTable",
-#                "ec2:DescribeRouteTables",
-#                "ec2:DescribeVpcs",
-#                "ec2:ReplaceRoute",
-#                "ec2:DescribeRegions",
-#                "ec2:DescribeNetworkInterfaces",
-#                "ec2:DisassociateRouteTable",
-#                "ec2:ReplaceRouteTableAssociation",
-#                "logs:CreateLogGroup",
-#                "logs:PutLogEvents"
-#            ]
-#        }
-#    ]
-#}
-#EOF
-#}
+resource "aws_iam_instance_profile" "csr1000v" {
+  name = "csr1000v"
+  role = "${aws_iam_role.csr_role.name}"
+}
+
+resource "aws_iam_role" "csr_role" {
+  name = "csr1000v"
+  path = "/"
+
+  assume_role_policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogStream",
+                "cloudwatch:",
+                "s3:",
+                "ec2:AssociateRouteTable",
+                "ec2:CreateRoute",
+                "ec2:CreateRouteTable",
+                "ec2:DeleteRoute",
+                "ec2:DeleteRouteTable",
+                "ec2:DescribeRouteTables",
+                "ec2:DescribeVpcs",
+                "ec2:ReplaceRoute",
+                "ec2:DescribeRegions",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DisassociateRouteTable",
+                "ec2:ReplaceRouteTableAssociation",
+                "logs:CreateLogGroup",
+                "logs:PutLogEvents"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+}
 
 module "security_group_outside" {
   source  = "terraform-aws-modules/security-group/aws"
