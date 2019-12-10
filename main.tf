@@ -82,6 +82,9 @@ resource "aws_iam_role" "csr_role" {
         {
             "Sid": "VisualEditor0",
             "Effect": "Allow",
+            "Principal": {
+              "Service": "ec2.amazonaws.com"
+            },
             "Action": [
                 "logs:CreateLogStream",
                 "cloudwatch:",
