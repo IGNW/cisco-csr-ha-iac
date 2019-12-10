@@ -108,6 +108,7 @@ module instance1 {
   #ami = "ami-0fc7a3d5400f4619d"
   ami = "${data.aws_ami.csr1000v.id}"
   instance_type          = "c4.large"
+  subnet_id = aws_subnet.sub1.id
   name = "csr1000v1"
   key_name = "csr1000v"
   associate_public_ip_address = true
@@ -158,6 +159,7 @@ module instance2 {
   name = "csr1000v2"
   key_name = "csr1000v"
   instance_type          = "c4.large"
+  subnet_id = aws_subnet.sub1.id
   #network_interface = [
   #  # Outside network Interface
   #  {
