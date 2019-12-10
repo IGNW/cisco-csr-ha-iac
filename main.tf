@@ -19,6 +19,10 @@ resource "aws_subnet" "sub1" {
 resource "aws_network_interface" "csr1000v1failover" {
   subnet_id = aws_subnet.sub1.id
   security_groups = ["${module.security_group_failover.this_security_group_id}"]
+  attachment {
+    instance     = "${module.instance1.id}"
+    device_index = 1
+  }
 }
 
 resource "aws_network_interface" "csr1000v2failover" {
