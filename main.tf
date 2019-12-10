@@ -64,7 +64,7 @@ resource "aws_network_interface" "csr1000v2inside" {
 
 resource "aws_iam_instance_profile" "csr1000v" {
   name = "csr1000v"
-  role = "${aws_iam_role.csr1000v.name}"
+  role = "${aws_iam_role.csr_role.name}"
 }
 
 resource "aws_iam_role" "csr_role" {
