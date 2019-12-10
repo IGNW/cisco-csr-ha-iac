@@ -82,9 +82,9 @@ resource "aws_iam_role" "csr_role" {
         {
             "Sid": "",
             "Effect": "Allow",
-            "principals" = {
-              "type" = "Service"
-              "identifiers" = [
+            "principals":  {
+              "type":  "Service",
+              "identifiers": [
                 "ec2.amazonaws.com",
                 "events.amazonaws.com",
                 "logs.us-west-1.amazonaws.com",
@@ -95,6 +95,7 @@ resource "aws_iam_role" "csr_role" {
                 "s3.amazonaws.com",
                 "monitoring.rds.amazonaws.com",
               ]
+            },
             "Action": [
                 "logs:CreateLogStream",
                 "cloudwatch:",
