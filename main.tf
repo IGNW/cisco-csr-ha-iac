@@ -83,8 +83,8 @@ resource "aws_iam_role" "csr_role" {
             "Sid": "",
             "Effect": "Allow",
             "Principal":  {
-              "type":  "Service",
-              "identifiers": [
+              "Type":  "Service",
+              "Identifiers": [
                 "ec2.amazonaws.com",
                 "events.amazonaws.com",
                 "logs.us-west-1.amazonaws.com",
