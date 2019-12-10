@@ -119,7 +119,7 @@ module "security_group_outside" {
   vpc_id      = aws_vpc.csr1000vvpc.id
 
   ingress_cidr_blocks = ["0.0.0.0/0"]
-  ingress_rules       = ["https-443-tcp", "ssh", "http-80-tcp", "all-icmp"]
+  ingress_rules       = ["https-443-tcp", "http-80-tcp", "all-icmp"]
   egress_rules        = ["all-all"]
 }
 
