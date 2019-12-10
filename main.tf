@@ -30,7 +30,7 @@ resource "aws_network_interface" "csr1000v2failover" {
   security_groups = ["${module.security_group_failover.this_security_group_id}"]
   attachment {
     instance     = join("", "${module.instance2.id}")
-    device_index = 1
+    device_index = 2
   }
 }
 
@@ -48,7 +48,7 @@ resource "aws_network_interface" "csr1000v2inside" {
   security_groups = ["${module.security_group_inside.this_security_group_id}"]
   attachment {
     instance     = join("", "${module.instance2.id}")
-    device_index = 1
+    device_index = 2
   }
 }
 
