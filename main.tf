@@ -80,22 +80,8 @@ resource "aws_iam_role" "csr_role" {
 "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "",
+            "Sid": "VisualEditor0",
             "Effect": "Allow",
-            "Principal":  {
-              "Type":  "Service",
-              "Identifiers": [
-                "ec2.amazonaws.com",
-                "events.amazonaws.com",
-                "logs.us-west-1.amazonaws.com",
-                "logs.us-west-2.amazonaws.com",
-                "logs.us-east-1.amazonaws.com",
-                "logs.us-east-2.amazonaws.com",
-                "rds.amazonaws.com",
-                "s3.amazonaws.com",
-                "monitoring.rds.amazonaws.com"
-              ]
-            },
             "Action": [
                 "logs:CreateLogStream",
                 "cloudwatch:",
@@ -114,7 +100,8 @@ resource "aws_iam_role" "csr_role" {
                 "ec2:ReplaceRouteTableAssociation",
                 "logs:CreateLogGroup",
                 "logs:PutLogEvents"
-            ]
+            ],
+            "Resource": "*"
         }
     ]
 }
