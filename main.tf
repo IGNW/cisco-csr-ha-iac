@@ -127,7 +127,7 @@ module instance1 {
   name = "csr1000v1"
   key_name = "csr1000v"
   associate_public_ip_address = true
-  security_groups = ["${module.security_group_outside.this_security_group_id}"]
+  vpc_security_group_ids = ["${module.security_group_outside.this_security_group_id}"]
   #network_interface = [
   #  # Outside network Interface
   #  {
@@ -176,7 +176,7 @@ module instance2 {
   key_name = "csr1000v"
   instance_type          = "c4.large"
   subnet_id = aws_subnet.sub1.id
-  security_groups = ["${module.security_group_outside.this_security_group_id}"]
+  vpc_security_group_ids = ["${module.security_group_outside.this_security_group_id}"]
   #network_interface = [
   #  # Outside network Interface
   #  {
