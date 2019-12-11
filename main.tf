@@ -101,6 +101,7 @@ resource "aws_iam_role" "csr_role" {
                 "logs:CreateLogGroup",
                 "logs:PutLogEvents"
             ]
+            "Resource": "*"
         }
     ]
 }
