@@ -77,7 +77,7 @@ resource "aws_iam_role" "csr_role" {
 
   assume_role_policy = <<EOF
 {
-    "Version": "2012-10-17",
+"Version": "2012-10-17",
     "Statement": [
         {
             "Sid": "VisualEditor0",
@@ -100,7 +100,7 @@ resource "aws_iam_role" "csr_role" {
                 "ec2:ReplaceRouteTableAssociation",
                 "logs:CreateLogGroup",
                 "logs:PutLogEvents"
-            ]
+            ],
             "Resource": "*"
         }
     ]
