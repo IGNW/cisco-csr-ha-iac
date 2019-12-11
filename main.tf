@@ -1,3 +1,23 @@
+### New interfaces
+### "Outside"  Interface publicly available 80 and 443 open to any (DHCP supplied)
+##  Next hop interface. 
+##  The subnet id will reference the appropriate network the router is in. Should be same vpc as the internet gateway
+##    Should be part of the security group for outside traffic in the 80 and 443
+#DEFAULT ## "Inside"   Inteface privately connected to Subnet both of them are on (manually supplied)
+##  Should have all and all allowed for the traffic in the subnet
+##  
+### "Failover" Interface to connect to eachother
+#
+#
+### Firewall Rules that need to be made
+### "Port"     UDP 4789 4790 between them 
+### Outside interface will need 80 and 443 opened up
+### Internet gateway will need to be created for use by the routers (to ingest the tables)
+### "internet gateway" csr_public_rtb 
+##
+##mode should be primary on 1 and secondary on 2
+#
+##For next hop interface it would be the public interface
 resource "aws_vpc" "csr1000vvpc" {
   cidr_block       = "10.0.0.0/16"
 
@@ -71,11 +91,12 @@ resource "aws_iam_instance_profile" "csr1000v" {
   role = "${aws_iam_role.csr_role.name}"
 }
 
-resource "aws_iam_role" "csr_role" {
-  name = "csr1000v"
-  path = "/"
+resource "aws_iam_policy" "csrpolicy" {
+  name        = "csr_policy"
+  path        = "/"
+  description = "My test policy"
 
-  assume_role_policy = <<EOF
+  policy = <<EOF
 {
 "Version": "2012-10-17",
     "Statement": [
@@ -104,6 +125,28 @@ resource "aws_iam_role" "csr_role" {
             "Resource": "*"
         }
     ]
+}
+EOF
+}
+
+resource "aws_iam_role" "csr_role" {
+  name = "csr1000v"
+  path = "/"
+  permissions_boundary = aws_iam_policy.csrpolicy.arn
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
 }
 EOF
 }
