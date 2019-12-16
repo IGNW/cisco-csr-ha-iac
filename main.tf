@@ -58,7 +58,7 @@ resource "aws_network_interface" "csr1000v2failover" {
 
 resource "aws_network_interface" "csr1000v1inside" {
   subnet_id = aws_subnet.sub1.id
-  security_groups = [module.security_group_inside.this_security_group_id]
+  security_groups = ["${module.security_group_inside.this_security_group_id}"]
   source_dest_check = false
   attachment {
     instance     = join("", "${module.instance1.id}")
@@ -68,7 +68,7 @@ resource "aws_network_interface" "csr1000v1inside" {
 
 resource "aws_network_interface" "csr1000v2inside" {
   subnet_id = aws_subnet.sub1.id
-  security_groups = [module.security_group_inside.this_security_group_id
+  security_groups = ["${module.security_group_inside.this_security_group_id}"]
   source_dest_check = false
   attachment {
     instance     = join("", "${module.instance2.id}")
