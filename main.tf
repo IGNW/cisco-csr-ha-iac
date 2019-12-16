@@ -169,7 +169,7 @@ module "ssh_security_group" {
   version = "~> 3.0"
   name = "csrssh"
   vpc_id      = aws_vpc.csr1000vvpc.id
-  ingress_cidr_blocks = ["0.0.0.0/0"]
+  ingress_cidr_blocks = ["0.0.0.0/0", "66.68.99.194/32"]
 
 }
 
