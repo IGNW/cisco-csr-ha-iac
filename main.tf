@@ -160,8 +160,13 @@ module "security_group_outside" {
   vpc_id      = aws_vpc.csr1000vvpc.id
 
   ingress_cidr_blocks = ["0.0.0.0/0"]
-  ingress_rules       = ["ssh", "https-443-tcp", "http-80-tcp", "all-icmp"]
+  ingress_rules       = ["https-443-tcp", "http-80-tcp", "all-icmp"]
   egress_rules        = ["all-all"]
+}
+
+module "ssh_security_group" {
+  source  = "terraform-aws-modules/security-group/aws//modules/ssh"
+  version = "~> 3.0"
 }
 
 module "security_group_inside" {
@@ -217,7 +222,7 @@ module instance1 {
   key_name = "csr"
   iam_instance_profile = "${aws_iam_instance_profile.csr1000v.name}"
   associate_public_ip_address = true
-  vpc_security_group_ids = ["${module.security_group_outside.this_security_group_id}"]
+  vpc_security_group_ids = ["${module.security_group_outside.this_security_group_id}", "${module.ssh_security_group.this_security_group_id}"]
   #network_interface = [
   #  # Outside network Interface
   #  {
