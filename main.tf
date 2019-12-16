@@ -167,6 +167,10 @@ module "security_group_outside" {
 module "ssh_security_group" {
   source  = "terraform-aws-modules/security-group/aws//modules/ssh"
   version = "~> 3.0"
+  name = "csrssh"
+  vpc_id      = aws_vpc.csr1000vvpc.id
+  ingress_cidr_blocks = ["0.0.0.0/0"]
+
 }
 
 module "security_group_inside" {
