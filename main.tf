@@ -68,7 +68,7 @@ resource "aws_network_interface" "csr1000v1inside" {
 
 resource "aws_network_interface" "csr1000v2inside" {
   subnet_id = aws_subnet.sub1.id
-  security_groups = [module.security_group_inside.this_security_group_id]
+  security_groups = [module.security_group_inside.this_security_group_id
   source_dest_check = false
   attachment {
     instance     = join("", "${module.instance2.id}")
@@ -160,7 +160,7 @@ module "security_group_outside" {
   vpc_id      = aws_vpc.csr1000vvpc.id
 
   ingress_cidr_blocks = ["0.0.0.0/0"]
-  ingress_rules       = ["ssh", "https-443-tcp", "http-80-tcp", "all-icmp"]
+  ingress_rules       = ["https-443-tcp", "http-80-tcp", "all-icmp"]
   egress_rules        = ["all-all"]
 }
 
