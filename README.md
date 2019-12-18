@@ -1,48 +1,61 @@
-# cisco-csr-ha-iac
-Module to HA two instances of a CSR 1000v. 
+# IGNW Classroom
 
-# AMI
+## What this is
 
-- We are using [Cisco Cloud Services Router (CSR) 1000V - BYOL for Maximum Performance](https://aws.amazon.com/marketplace/pp/B00NF48FI2?ref=cns_srchrow#pdp-usage) from the marketplace for the HA pair instances. Details:
+This chunk of Terraform code is expressly designed to build the IGNW networking
+lab in AWS for classrooms.
 
-  - **Name:** cisco-CSR-.16.12.01a-BYOL-HVM-2
-  - **AMI Name:** cisco-CSR-.16.12.01a-BYOL-HVM-2-624f5bb1-7f8e-4f7c-ad2c-03ae1cd1c2d3-ami-0a35891127a1b85e1.4
-  - **AMI ID:** ami-0ea109acd52c4b94d
-  - **Source:** aws-marketplace/cisco-CSR-.16.12.01a-BYOL-HVM-2-624f5bb1-7f8e-4f7c-ad2c-03ae1cd1c2d3-ami-0a35891127a1b85e1.4
-  - **Owner:** 679593333241
+This code reads an array of student names, and provides each student the following:
 
-# Phase I Goal
+* 1 VPC
+* 1 Public Gateway
+* 1 NAT Node
+* 1 Public Subnet (10.1.1.0/24)
+* 1 Private Subnet (10.1.2.0/24)
+* 1 Public Security Group (Currently ALL/ALL)
+* 1 Private Security Group (Intentionally ALL/ALL)
+* 1 Student Desktop (10.1.1.100) - With a Public Routed IP Address
+* 1 Student Node (10.1.2.100)
+* 1 Student Router (10.1.2.101)
+* 1 Student ASAv (10.1.2.102)
 
-1-for-1 Redundancy Topology: Both the Cisco CSR 1000v routers have a direct connection to the same subnet, the routers provide a 1-for-1 redundancy (Active-Passive mode); that is, the active Cisco CSR 1000v router is the next-hop router for a subnet. The other Cisco CSR 1000v router is the passive router for all the routes.
+## How to Use it
 
+### Edit students.tf
 
-# Current State
+Students.tf contains two variables that should be edited:
 
-Two VPCs (East and West) have been established, along with VPC peering between the two VPCs. Instance_West of the CSR 1000v has been stood up. (Note: Peering is not necessary for this phase but has been added in advance.)
- 
-# TODO
+* `project` - The name or project code of the class being run
+* `students` - An array containing the names of each student in the class
 
-- Drop in Instance_East: eC2 using the Cisco CSR image above. The is the passive node in the HA pair.
-- Add SSH keys for both instances
-- ELB between Instance_East and Instance_West
-- Lambda to monitor failover event and provide failover instance with Cisco CSR config
-- S3 Bucket to hold Cisco config
+There are also two variables that should **NOT** be edited:
 
+* `private_key`: Used to set the private key on all nodes
+* `public_key`: Used to set the public key on all nodes
 
-# Resources
+### Run Terraform
 
-  - Main Confluence page for Project:
+A simple `terraform apply` will spin up all resources for the classroom. Be warned,
+this can take up to 10 minutes, so it's best to run this as early as possible. Before
+the class if possible.
 
-  [Cisco CSR 1000V Project - AWS Network Design](https://ignwsolutions.atlassian.net/wiki/spaces/CUS/pages/291176484/Cisco+CSR+1000V+Project+-+AWS+Network+Design)
+### Delivery
 
+A script has been provided named `student_export.sh`. This script looks for all
+Public IPs attached to desktop nodes and attaches them to a name and wraps them
+into a simple CSV. It then creates a zip file containing the CSV and the SSH keys
+to be distributed via e-mail to the students.
 
-# Tooling
+We could definitely use a "How to use this.txt" that is also included in this zip
+file, making the instructors life a little easier.
 
+## Dependencies
 
-Current development is in Terraform Cloud at the following workspace:
+### AWS CLI Tools
+First, ensure you have the AWS CLI tools installed: `https://docs.aws.amazon.com/cli/latest/userguide/installing.html`
 
-https://app.terraform.io/app/IGNW-TEST/workspaces/cisco-csr-ha-iac/runs
+* Run: `aws configure` - Follow the prompt to enter in your IGNW AWS Credentials.
+Terraform will use these credentials to provision resources
 
-All code is in the current repo:
-
-https://github.com/IGNW/cisco-csr-ha-iac
+### Terraform Installation
+Second, ensure you have terraform installed: `https://www.terraform.io/downloads.html`.
