@@ -3,7 +3,7 @@ variable "project" {
 }
 
 variable "students" {
-  default = ["ryan","tige"]
+  default = ["tyler"]
 }
 
 variable "private_key" {
