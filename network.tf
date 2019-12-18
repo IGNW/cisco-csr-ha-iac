@@ -4,7 +4,7 @@ resource "aws_vpc" "training" {
   enable_dns_hostnames = true
   count = "${length(var.students)}"
 
-  tags {
+  tags = {
     Project = "${var.project}"
     Name = "${var.project} - VPC - ${element(var.students, count.index)}"
     Student = "${element(var.students, count.index)}"
@@ -15,7 +15,7 @@ resource "aws_internet_gateway" "training" {
   count = "${length(var.students)}"
   vpc_id = "${element(aws_vpc.training.*.id, count.index)}"
 
-  tags {
+  tags = {
     Project = "${var.project}"
     Name = "${var.project} - Gateway - ${element(var.students, count.index)}"
     Student = "${element(var.students, count.index)}"
@@ -79,7 +79,7 @@ resource "aws_security_group" "nat" {
         cidr_blocks = ["0.0.0.0/0"]
     }
 
-  tags {
+  tags = {
     Project = "${var.project}"
     Name = "${var.project} - NAT Security Group - ${element(var.students, count.index)}"
     Student = "${element(var.students, count.index)}"
@@ -96,7 +96,7 @@ resource "aws_instance" "nat" {
   count = "${length(var.students)}"
   subnet_id = "${element(aws_subnet.us-west-2b-public.*.id, count.index)}"
 
-  tags {
+  tags = {
     Project = "${var.project}"
     Name = "${var.project} - NAT Node - ${element(var.students, count.index)}"
     Student = "${element(var.students, count.index)}"
@@ -112,7 +112,7 @@ resource "aws_subnet" "us-west-2b-public" {
   cidr_block = "${var.public_subnet_cidr}"
   map_public_ip_on_launch = true
   availability_zone = "us-west-2b"
-  tags {
+  tags = {
     Project = "${var.project}"
     Name = "${var.project} - Public Subnet - ${element(var.students, count.index)}"
     Student = "${element(var.students, count.index)}"
@@ -128,7 +128,7 @@ resource "aws_route_table" "us-west-2b-public" {
     gateway_id = "${element(aws_internet_gateway.training.*.id, count.index)}"
   }
 
-  tags {
+  tags = {
     Project = "${var.project}"
     Name = "${var.project} - Public Route Table - ${element(var.students, count.index)}"
     Student = "${element(var.students, count.index)}"
@@ -152,7 +152,7 @@ resource "aws_subnet" "us-west-2b-private" {
   cidr_block = "${var.private_subnet_cidr}"
   availability_zone = "us-west-2b"
 
-  tags {
+  tags = {
     Project = "${var.project}"
     Name = "${var.project} - Private Subnet - ${element(var.students, count.index)}"
     Student = "${element(var.students, count.index)}"
@@ -168,7 +168,7 @@ resource "aws_route_table" "us-west-2b-private" {
     instance_id = "${element(aws_instance.nat.*.id, count.index)}"
   }
 
-  tags {
+  tags = {
     Project = "${var.project}"
     Name = "${var.project} - Private Subnet Route Table - ${element(var.students, count.index)}"
     Student = "${element(var.students, count.index)}"

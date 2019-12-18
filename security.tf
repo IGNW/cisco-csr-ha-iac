@@ -4,7 +4,7 @@ resource "aws_security_group" "student_node" {
   count = "${length(var.students)}"
   vpc_id = "${element(aws_vpc.training.*.id, count.index)}"
 
-  tags {
+  tags = {
     Project = "${var.project}"
     Name = "${var.project} - Public Security Group - ${element(var.students, count.index)}"
     Student = "${element(var.students, count.index)}"
@@ -45,7 +45,7 @@ resource "aws_security_group" "student_router" {
     cidr_blocks = ["10.1.1.0/24"]
   }
 
-  tags {
+  tags = {
     Project = "${var.project}"
     Name = "${var.project} - Private Security Group - ${element(var.students, count.index)}"
     Student = "${element(var.students, count.index)}"

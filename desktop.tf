@@ -8,7 +8,7 @@ resource "aws_instance" "desktop" {
   vpc_security_group_ids = ["${element(aws_security_group.student_router.*.id, count.index)}","${element(aws_security_group.student_node.*.id, count.index)}"]
   private_ip = "10.1.1.100"
 
-  tags {
+  tags = {
     Project = "${var.project}"
     Name = "${var.project} - Desktop - ${element(var.students, count.index)}"
     Student = "${element(var.students, count.index)}"
@@ -27,6 +27,8 @@ resource "aws_instance" "desktop" {
       type        = "ssh"
       user        = "ubuntu"
       private_key = "${var.private_key}"
+      host        = self.public_ip
+
     }
   }
 
@@ -37,6 +39,7 @@ resource "aws_instance" "desktop" {
       type        = "ssh"
       user        = "ubuntu"
       private_key = "${var.private_key}"
+      host        = self.public_ip
     }
   }
 
@@ -48,6 +51,7 @@ resource "aws_instance" "desktop" {
       type        = "ssh"
       user        = "ubuntu"
       private_key = "${var.private_key}"
+      host        = self.public_ip
     }
   }
 
@@ -58,6 +62,7 @@ resource "aws_instance" "desktop" {
       type        = "ssh"
       user        = "ubuntu"
       private_key = "${var.private_key}"
+      host        = self.public_ip
     }
   }
 

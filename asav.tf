@@ -7,7 +7,7 @@ resource "aws_instance" "training_asav" {
   key_name = "student"
   private_ip = "10.1.2.102"
 
-  tags {
+  tags = {
     Project = "${var.project}"
     Name = "${var.project} - ASAv - ${element(var.students, count.index)}"
     Student = "${element(var.students, count.index)}"
