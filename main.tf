@@ -1,39 +1,53 @@
-### New interfaces
-### "Outside"  Interface publicly available 80 and 443 open to any (DHCP supplied)
-##  Next hop interface. 
-##  The subnet id will reference the appropriate network the router is in. Should be same vpc as the internet gateway
-##    Should be part of the security group for outside traffic in the 80 and 443
-#DEFAULT ## "Inside"   Inteface privately connected to Subnet both of them are on (manually supplied)
-##  Should have all and all allowed for the traffic in the subnet
-##  
-### "Failover" Interface to connect to eachother
-#
-#
-### Firewall Rules that need to be made
-### "Port"     UDP 4789 4790 between them 
-### Outside interface will need 80 and 443 opened up
-### Internet gateway will need to be created for use by the routers (to ingest the tables)
-### "internet gateway" csr_public_rtb 
-##
-##mode should be primary on 1 and secondary on 2
-#
-##For next hop interface it would be the public interface
+# PUBLIC SUBNET
+resource "aws_internet_gateway" "gw" {
+  vpc_id = "${aws_vpc.csr1000vvpc.id}"
+}
+
+
+resource "aws_subnet" "public" {
+  vpc_id               = "${aws_vpc.csr1000vvpc.id}"
+  availability_zone    = "us-west-2a"
+  cidr_block       = "10.1.1.0/24"
+  enable_dns_support   = true
+  enable_dns_hostnames = true
+}
+
+resource "aws_route_table" "public" {
+  vpc_id = "${element(aws_vpc.training.*.id, count.index)}"
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.gw.id
+  }
+}
+
+resource "aws_route_table_association" "us-west-2b-public" {
+  subnet_id = aws_subnet.public.id
+  route_table_id = aws_route_table.public.id
+}
+
+# PRIVATE SUBNET
 resource "aws_vpc" "csr1000vvpc" {
-  cidr_block       = "10.0.0.0/16"
+  cidr_block       = "10.1.0.0/16"
 
   tags = {
     Name = "csr1000vvpc"
   }
 }
 
-resource "aws_internet_gateway" "gw" {
-  vpc_id = "${aws_vpc.csr1000vvpc.id}"
+resource "aws_subnet" "private" {
+  vpc_id               = "${aws_vpc.csr1000vvpc.id}"
+  availability_zone    = "us-west-2a"
+  cidr_block           = "${cidrsubnet(aws_vpc.csr1000vvpc.cidr_block, 4, 1)}"
 }
 
-resource "aws_subnet" "sub1" {
-  vpc_id            = "${aws_vpc.csr1000vvpc.id}"
-  availability_zone = "us-west-2a"
-  cidr_block        = "${cidrsubnet(aws_vpc.csr1000vvpc.cidr_block, 4, 1)}"
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.public.id
+}
+
+resource "aws_route_table_association" "public_subnet" {
+  subnet_id = aws_subnet.public.id
+  route_table_id = aws_route_table.privateid
 }
 
 resource "aws_network_interface" "csr1000v1failover" {
@@ -217,8 +231,6 @@ module "security_group_failover" {
 module instance1 {
   source                 = "terraform-aws-modules/ec2-instance/aws"
   version                = "~> 2.0"
-  #ami = "cisco-CSR-.16.12.01a-BYOL-HVM-2-624f5bb1-7f8e-4f7c-ad2c-03ae1cd1c2d3-ami-0a35891127a1b85e1.4" 
-  #ami = "ami-0fc7a3d5400f4619d"
   ami = "${data.aws_ami.csr1000v.id}"
   instance_type          = "c4.large"
   subnet_id = aws_subnet.sub1.id
@@ -227,26 +239,6 @@ module instance1 {
   iam_instance_profile = "${aws_iam_instance_profile.csr1000v.name}"
   associate_public_ip_address = true
   vpc_security_group_ids = ["${module.security_group_outside.this_security_group_id}", "${module.ssh_security_group.this_security_group_id}"]
-  #network_interface = [
-  #  # Outside network Interface
-  #  {
-  #    device_index = 0
-  #    network_interface_id  = aws_network_interface.csr1000v1outside.id
-  #  },
-
-  #  # Inside network Interface
-  #  {
-  #    device_index = 1
-  #    network_interface_id  = aws_network_interface.csr1000v1inside.id
-  #  },
-
-  #  # Failover network Interface
-  #  {
-  #    device_index = 2
-  #    network_interface_id  = aws_network_interface.csr1000v1failover.id
-  #  },
-  #]
-  
 }
 
 data "aws_ami" "csr1000v" {
@@ -269,7 +261,7 @@ data "aws_ami" "csr1000v" {
 module instance2 {
   source                 = "terraform-aws-modules/ec2-instance/aws"
   version                = "~> 2.0"
-  associate_public_ip_address = true
+  #associate_public_ip_address = true
   ami = "${data.aws_ami.csr1000v.id}"
   name = "csr1000v2"
   key_name = "csr"
@@ -277,23 +269,6 @@ module instance2 {
   iam_instance_profile = "${aws_iam_instance_profile.csr1000v.name}"
   subnet_id = aws_subnet.sub1.id
   vpc_security_group_ids = ["${module.security_group_outside.this_security_group_id}"]
-  #network_interface = [
-  #  # Outside network Interface
-  #  {
-  #    device_index = 0
-  #    network_interface_id  = aws_network_interface.csr1000v2outside.id
-  #  },
+  private_ip = "10.1.2.101"
 
-  #  # Inside network Interface
-  #  {
-  #    device_index = 1
-  #    network_interface_id  = aws_network_interface.csr1000v2inside.id
-  #  },
-
-  #  # Failover network Interface
-  #  {
-  #    device_index = 2
-  #    network_interface_id  = aws_network_interface.csr1000v2failover.id
-  #  },
-  #]
 }
