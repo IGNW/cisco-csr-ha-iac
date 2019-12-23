@@ -50,6 +50,16 @@ resource "aws_route_table_association" "private" {
   route_table_id = aws_route_table.private.id
 }
 
+resource "aws_network_interface" "csr1000v1inside" {
+  subnet_id = aws_subnet.private.id
+  security_groups = ["${module.security_group_inside.this_security_group_id}"]
+  source_dest_check = false
+  attachment {
+    instance     = join("", "${module.instance1.id}")
+    device_index = 2
+  }
+}
+
 resource "aws_network_interface" "csr1000v1failover" {
   subnet_id = aws_subnet.private.id
   security_groups = ["${module.security_group_failover.this_security_group_id}"]
@@ -70,15 +80,6 @@ resource "aws_network_interface" "csr1000v2failover" {
   }
 }
 
-resource "aws_network_interface" "csr1000v1inside" {
-  subnet_id = aws_subnet.private.id
-  security_groups = ["${module.security_group_inside.this_security_group_id}"]
-  source_dest_check = false
-  attachment {
-    instance     = join("", "${module.instance1.id}")
-    device_index = 2
-  }
-}
 
 resource "aws_network_interface" "csr1000v2inside" {
   subnet_id = aws_subnet.private.id
@@ -89,16 +90,6 @@ resource "aws_network_interface" "csr1000v2inside" {
     device_index = 2
   }
 }
-
-#resource "aws_network_interface" "csr1000v1outside" {
-#  subnet_id = aws_subnet.private.id
-#  security_groups = ["${module.security_group_outside.this_security_group_id}"]
-#}
-#
-#resource "aws_network_interface" "csr1000v2outside" {
-#  subnet_id = aws_subnet.private.id
-#  security_groups = ["${module.security_group_outside.this_security_group_id}"]
-#}
 
 resource "aws_iam_instance_profile" "csr1000v" {
   name = "csr1000v"
