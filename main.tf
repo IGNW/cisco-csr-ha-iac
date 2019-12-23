@@ -1,6 +1,6 @@
 # PUBLIC SUBNET
 resource "aws_internet_gateway" "gw" {
-  vpc_id = "${aws_vpc.csr1000vvpc.id}"
+  vpc_id = "${aws_vpc.public.id}"
 }
 
 resource "aws_vpc" "public" {
@@ -10,14 +10,14 @@ resource "aws_vpc" "public" {
 }
 
 resource "aws_subnet" "public" {
-  vpc_id               = "${aws_vpc.csr1000vvpc.id}"
+  vpc_id               = "${aws_vpc.public.id}"
   availability_zone    = "us-west-2a"
   cidr_block           = "10.1.1.0/24"
   map_public_ip_on_launch = true
 }
 
 resource "aws_route_table" "public" {
-  vpc_id = "${aws_vpc.csr1000vvpc.id}"
+  vpc_id = "${aws_vpc.public.id}"
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -33,16 +33,12 @@ resource "aws_route_table_association" "public" {
 # PRIVATE SUBNET
 resource "aws_vpc" "private" {
   cidr_block       = "10.1.0.0/16"
-
-  tags = {
-    Name = "csr1000vvpc"
-  }
 }
 
 resource "aws_subnet" "private" {
-  vpc_id               = "${aws_vpc.csr1000vvpc.id}"
+  vpc_id               = "${aws_vpc.private.id}"
   availability_zone    = "us-west-2a"
-  cidr_block           = "${cidrsubnet(aws_vpc.csr1000vvpc.cidr_block, 4, 1)}"
+  cidr_block           = "${cidrsubnet(aws_vpc.private.cidr_block, 4, 1)}"
 }
 
 resource "aws_route_table" "private" {
@@ -175,7 +171,7 @@ module "security_group_outside" {
 
   name        = "csroutside"
   description = "Security group for public interface of csr1000v"
-  vpc_id      = aws_vpc.csr1000vvpc.id
+  vpc_id      = aws_vpc.public.id
 
   ingress_cidr_blocks = ["0.0.0.0/0"]
   ingress_rules       = ["https-443-tcp", "http-80-tcp", "all-icmp"]
@@ -186,7 +182,7 @@ module "ssh_security_group" {
   source  = "terraform-aws-modules/security-group/aws//modules/ssh"
   version = "~> 3.0"
   name = "csrssh"
-  vpc_id      = aws_vpc.csr1000vvpc.id
+  vpc_id      = aws_vpc.public.id
   ingress_cidr_blocks = ["0.0.0.0/0", "66.68.99.194/32"]
 
 }
@@ -197,9 +193,9 @@ module "security_group_inside" {
 
   name        = "csrinside"
   description = "Security group for private interface of csr1000v"
-  vpc_id      = aws_vpc.csr1000vvpc.id
+  vpc_id      = aws_vpc.private.id
 
-  ingress_cidr_blocks = ["${aws_vpc.csr1000vvpc.cidr_block}"]
+  ingress_cidr_blocks = ["${aws_vpc.private.cidr_block}"]
   ingress_rules       = ["all-all"]
   egress_rules        = ["all-all"]
 }
@@ -210,23 +206,23 @@ module "security_group_failover" {
 
   name        = "csrfailover"
   description = "Security group for private interface of csr1000v"
-  vpc_id      = aws_vpc.csr1000vvpc.id
+  vpc_id      = aws_vpc.private.id
 
-  ingress_cidr_blocks = ["${aws_vpc.csr1000vvpc.cidr_block}"]
+  ingress_cidr_blocks = ["${aws_vpc.private.cidr_block}"]
   ingress_with_cidr_blocks = [
     {
       from_port   = 4789
       to_port     = 4789
       protocol    = "udp"
       description = "Failover udp check between routers"
-      cidr_blocks = "${aws_vpc.csr1000vvpc.cidr_block}"
+      cidr_blocks = "${aws_vpc.private.cidr_block}"
     },
     {
       from_port   = 4790
       to_port     = 4790
       protocol    = "udp"
       description = "Failover udp check between routers"
-      cidr_blocks = "${aws_vpc.csr1000vvpc.cidr_block}"
+      cidr_blocks = "${aws_vpc.private.cidr_block}"
     },
   ]
   egress_rules        = ["all-all"]
