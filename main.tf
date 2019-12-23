@@ -51,7 +51,7 @@ resource "aws_route_table" "private" {
 
 resource "aws_route_table_association" "public_subnet" {
   subnet_id = aws_subnet.public.id
-  route_table_id = aws_route_table.privateid
+  route_table_id = aws_route_table.private.id
 }
 
 resource "aws_network_interface" "csr1000v1failover" {
