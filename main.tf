@@ -233,7 +233,7 @@ module instance1 {
   version                = "~> 2.0"
   ami = "${data.aws_ami.csr1000v.id}"
   instance_type          = "c4.large"
-  subnet_id = aws_subnet.private.id
+  subnet_id = aws_subnet.public.id
   name = "csr1000v1"
   key_name = "csr"
   iam_instance_profile = "${aws_iam_instance_profile.csr1000v.name}"
@@ -267,7 +267,7 @@ module instance2 {
   key_name = "csr"
   instance_type          = "c4.large"
   iam_instance_profile = "${aws_iam_instance_profile.csr1000v.name}"
-  subnet_id = aws_subnet.private.id
+  subnet_id = aws_subnet.public.id
   vpc_security_group_ids = ["${module.security_group_outside.this_security_group_id}"]
   private_ip = "10.1.2.101"
 
