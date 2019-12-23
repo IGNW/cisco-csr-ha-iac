@@ -3,13 +3,17 @@ resource "aws_internet_gateway" "gw" {
   vpc_id = "${aws_vpc.csr1000vvpc.id}"
 }
 
+resource "aws_vpc" "public" {
+  cidr_block           = "10.1.1.0/24"
+  enable_dns_support = true
+  enable_dns_hostnames = true
+}
 
 resource "aws_subnet" "public" {
   vpc_id               = "${aws_vpc.csr1000vvpc.id}"
   availability_zone    = "us-west-2a"
-  cidr_block       = "10.1.1.0/24"
-  enable_dns_support   = true
-  enable_dns_hostnames = true
+  cidr_block           = "10.1.1.0/24"
+  map_public_ip_on_launch = true
 }
 
 resource "aws_route_table" "public" {
