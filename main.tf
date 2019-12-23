@@ -31,7 +31,7 @@ resource "aws_route_table_association" "public" {
 }
 
 # PRIVATE SUBNET
-resource "aws_vpc" "csr1000vvpc" {
+resource "aws_vpc" "private" {
   cidr_block       = "10.1.0.0/16"
 
   tags = {
