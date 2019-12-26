@@ -218,7 +218,7 @@ module instance1 {
   version                = "~> 2.0"
   ami = "${data.aws_ami.csr1000v.id}"
   instance_type          = "c4.large"
-  subnet_id = aws_subnet.private.id
+  subnet_id = aws_subnet.public.id
   name = "csr1000v1"
   key_name = "csr"
   iam_instance_profile = "${aws_iam_instance_profile.csr1000v.name}"
