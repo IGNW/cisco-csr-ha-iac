@@ -90,6 +90,7 @@ resource "aws_route_table" "private" {
 resource "aws_network_interface" "csr1000v1inside" {
   subnet_id = aws_subnet.private1.id
   security_groups = ["${module.security_group_inside.this_security_group_id}"]
+  private_ips     = ["10.16.4.2"]
   source_dest_check = false
   attachment {
     instance     = join("", "${module.instance1.id}")
@@ -99,6 +100,7 @@ resource "aws_network_interface" "csr1000v1inside" {
 
 resource "aws_network_interface" "csr1000v1failover" {
   subnet_id = aws_subnet.private1.id
+  private_ips     = ["10.16.4.3"]
   security_groups = ["${module.security_group_failover.this_security_group_id}"]
   source_dest_check = false
   attachment {
@@ -109,6 +111,7 @@ resource "aws_network_interface" "csr1000v1failover" {
 
 resource "aws_network_interface" "csr1000v2failover" {
   subnet_id = aws_subnet.private2.id
+  private_ips     = ["10.16.5.2"]
   security_groups = ["${module.security_group_failover.this_security_group_id}"]
   source_dest_check = false
   attachment {
@@ -120,6 +123,7 @@ resource "aws_network_interface" "csr1000v2failover" {
 
 resource "aws_network_interface" "csr1000v2inside" {
   subnet_id = aws_subnet.private2.id
+  private_ips     = ["10.16.5.3"]
   security_groups = ["${module.security_group_inside.this_security_group_id}"]
   source_dest_check = false
   attachment {
@@ -266,6 +270,7 @@ module instance1 {
   key_name = "csr"
   iam_instance_profile = "${aws_iam_instance_profile.csr1000v.name}"
   associate_public_ip_address = true
+  private_ip = "10.16.4.1"
   vpc_security_group_ids = ["${module.security_group_outside.this_security_group_id}", "${module.ssh_security_group.this_security_group_id}"]
 }
 
@@ -297,5 +302,5 @@ module instance2 {
   iam_instance_profile = "${aws_iam_instance_profile.csr1000v.name}"
   subnet_id = aws_subnet.public2.id
   vpc_security_group_ids = ["${module.security_group_outside.this_security_group_id}", "${module.ssh_security_group.this_security_group_id}"]
-  #private_ip = "10.1.2.101"
+  private_ip = "10.16.5.1"
 }
