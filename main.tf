@@ -254,6 +254,5 @@ module instance2 {
   iam_instance_profile = "${aws_iam_instance_profile.csr1000v.name}"
   subnet_id = aws_subnet.public.id
   vpc_security_group_ids = ["${module.security_group_outside.this_security_group_id}"]
-  private_ip = "10.1.2.101"
-
+  #private_ip = "10.1.2.101"
 }
