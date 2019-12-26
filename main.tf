@@ -82,7 +82,6 @@ resource "aws_route_table_association" "private2" {
 
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.private.id
-  cidr_block = "10.16.0.0/16"
   tags = {
     Name = "csrv1000vprivate"
   }
