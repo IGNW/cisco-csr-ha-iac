@@ -3,11 +3,34 @@ resource "aws_internet_gateway" "gw" {
   vpc_id = "${aws_vpc.private.id}"
 }
 
-resource "aws_subnet" "public" {
+resource "aws_subnet" "public1" {
   vpc_id               = "${aws_vpc.private.id}"
   availability_zone    = "us-west-2a"
-  cidr_block           = "10.1.1.0/24"
+  cidr_block           = "10.16.0.0/24"
   map_public_ip_on_launch = true
+  tags = {
+    Name = "csrv1000vpublicsubnet1"
+  }
+}
+
+resource "aws_route_table_association" "public1" {
+  subnet_id = aws_subnet.public1.id
+  route_table_id = aws_route_table.public.id
+}
+
+resource "aws_subnet" "public2" {
+  vpc_id               = "${aws_vpc.private.id}"
+  availability_zone    = "us-west-2a"
+  cidr_block           = "10.16.1.0/24"
+  map_public_ip_on_launch = true
+  tags = {
+    Name = "csrv1000vpublicsubnet2"
+  }
+}
+
+resource "aws_route_table_association" "public1" {
+  subnet_id = aws_subnet.public2.id
+  route_table_id = aws_route_table.public.id
 }
 
 resource "aws_route_table" "public" {
@@ -24,36 +47,49 @@ resource "aws_route_table" "public" {
 
 }
 
-resource "aws_route_table_association" "public" {
-  subnet_id = aws_subnet.public.id
-  route_table_id = aws_route_table.public.id
-}
-
 # PRIVATE SUBNET
 resource "aws_vpc" "private" {
-  cidr_block       = "10.1.0.0/16"
+  cidr_block       = "10.16.0.0/16"
 }
 
-resource "aws_subnet" "private" {
+resource "aws_subnet" "private1" {
   vpc_id               = "${aws_vpc.private.id}"
   availability_zone    = "us-west-2a"
-  cidr_block           = "${cidrsubnet(aws_vpc.private.cidr_block, 4, 1)}"
+  cidr_block           = "10.16.4.0/24"
+  tags = {
+    Name = "csrv1000vprivatesubnet1"
+  }
+}
+
+resource "aws_route_table_association" "private1" {
+  subnet_id = aws_subnet.private1.id
+  route_table_id = aws_route_table.private.id
+}
+
+resource "aws_subnet" "private2" {
+  vpc_id               = "${aws_vpc.private.id}"
+  availability_zone    = "us-west-2a"
+  cidr_block           = "10.16.5.0/24"
+  tags = {
+    Name = "csrv1000vprivatesubnet2"
+  }
+}
+
+resource "aws_route_table_association" "private1" {
+  subnet_id = aws_subnet.private1.id
+  route_table_id = aws_route_table.private.id
 }
 
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.private.id
+  cidr_block = "10.16.0.0/16"
   tags = {
     Name = "csrv1000vprivate"
   }
 }
 
-resource "aws_route_table_association" "private" {
-  subnet_id = aws_subnet.private.id
-  route_table_id = aws_route_table.private.id
-}
-
 resource "aws_network_interface" "csr1000v1inside" {
-  subnet_id = aws_subnet.private.id
+  subnet_id = aws_subnet.private1.id
   security_groups = ["${module.security_group_inside.this_security_group_id}"]
   source_dest_check = false
   attachment {
@@ -63,7 +99,7 @@ resource "aws_network_interface" "csr1000v1inside" {
 }
 
 resource "aws_network_interface" "csr1000v1failover" {
-  subnet_id = aws_subnet.private.id
+  subnet_id = aws_subnet.private1.id
   security_groups = ["${module.security_group_failover.this_security_group_id}"]
   source_dest_check = false
   attachment {
@@ -73,7 +109,7 @@ resource "aws_network_interface" "csr1000v1failover" {
 }
 
 resource "aws_network_interface" "csr1000v2failover" {
-  subnet_id = aws_subnet.private.id
+  subnet_id = aws_subnet.private2.id
   security_groups = ["${module.security_group_failover.this_security_group_id}"]
   source_dest_check = false
   attachment {
@@ -84,7 +120,7 @@ resource "aws_network_interface" "csr1000v2failover" {
 
 
 resource "aws_network_interface" "csr1000v2inside" {
-  subnet_id = aws_subnet.private.id
+  subnet_id = aws_subnet.private2.id
   security_groups = ["${module.security_group_inside.this_security_group_id}"]
   source_dest_check = false
   attachment {
@@ -226,7 +262,7 @@ module instance1 {
   version                = "~> 2.0"
   ami = "${data.aws_ami.csr1000v.id}"
   instance_type          = "c4.large"
-  subnet_id = aws_subnet.public.id
+  subnet_id = aws_subnet.public1.id
   name = "csr1000v1"
   key_name = "csr"
   iam_instance_profile = "${aws_iam_instance_profile.csr1000v.name}"
@@ -260,7 +296,7 @@ module instance2 {
   key_name = "csr"
   instance_type          = "c4.large"
   iam_instance_profile = "${aws_iam_instance_profile.csr1000v.name}"
-  subnet_id = aws_subnet.public.id
+  subnet_id = aws_subnet.public2.id
   vpc_security_group_ids = ["${module.security_group_outside.this_security_group_id}", "${module.ssh_security_group.this_security_group_id}"]
   #private_ip = "10.1.2.101"
 }
