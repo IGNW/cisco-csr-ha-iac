@@ -1,23 +1,17 @@
 # PUBLIC SUBNET
 resource "aws_internet_gateway" "gw" {
-  vpc_id = "${aws_vpc.public.id}"
-}
-
-resource "aws_vpc" "public" {
-  cidr_block           = "10.1.1.0/24"
-  enable_dns_support = true
-  enable_dns_hostnames = true
+  vpc_id = "${aws_vpc.private.id}"
 }
 
 resource "aws_subnet" "public" {
-  vpc_id               = "${aws_vpc.public.id}"
+  vpc_id               = "${aws_vpc.private.id}"
   availability_zone    = "us-west-2a"
   cidr_block           = "10.1.1.0/24"
   map_public_ip_on_launch = true
 }
 
 resource "aws_route_table" "public" {
-  vpc_id = "${aws_vpc.public.id}"
+  vpc_id = "${aws_vpc.private.id}"
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -162,7 +156,7 @@ module "security_group_outside" {
 
   name        = "csroutside"
   description = "Security group for public interface of csr1000v"
-  vpc_id      = aws_vpc.public.id
+  vpc_id      = aws_vpc.private.id
 
   ingress_cidr_blocks = ["0.0.0.0/0"]
   ingress_rules       = ["https-443-tcp", "http-80-tcp", "all-icmp"]
@@ -173,7 +167,7 @@ module "ssh_security_group" {
   source  = "terraform-aws-modules/security-group/aws//modules/ssh"
   version = "~> 3.0"
   name = "csrssh"
-  vpc_id      = aws_vpc.public.id
+  vpc_id      = aws_vpc.private.id
   ingress_cidr_blocks = ["0.0.0.0/0", "66.68.99.194/32"]
 
 }
@@ -224,7 +218,7 @@ module instance1 {
   version                = "~> 2.0"
   ami = "${data.aws_ami.csr1000v.id}"
   instance_type          = "c4.large"
-  subnet_id = aws_subnet.public.id
+  subnet_id = aws_subnet.private.id
   name = "csr1000v1"
   key_name = "csr"
   iam_instance_profile = "${aws_iam_instance_profile.csr1000v.name}"
