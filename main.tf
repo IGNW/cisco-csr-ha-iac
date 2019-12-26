@@ -17,6 +17,11 @@ resource "aws_route_table" "public" {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.gw.id
   }
+
+  tags = {
+    Name = "csrv1000vpublic"
+  }
+
 }
 
 resource "aws_route_table_association" "public" {
@@ -37,6 +42,9 @@ resource "aws_subnet" "private" {
 
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.private.id
+  tags = {
+    Name = "csrv1000vprivate"
+  }
 }
 
 resource "aws_route_table_association" "private" {
