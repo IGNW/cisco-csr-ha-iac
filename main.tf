@@ -94,7 +94,7 @@ resource "aws_network_interface" "csr1000v1inside" {
   source_dest_check = false
   attachment {
     instance     = join("", "${module.instance1.id}")
-    device_index = 2
+    device_index = 1
   }
 }
 
@@ -128,7 +128,7 @@ resource "aws_network_interface" "csr1000v2inside" {
   source_dest_check = false
   attachment {
     instance     = join("", "${module.instance2.id}")
-    device_index = 2
+    device_index = 1
   }
 }
 
