@@ -332,6 +332,7 @@ resource "null_resource" "iface1" {
       private_key = file("${path.module}/csr.pem")
       user     = "ec2-user"
       agent    = true
+      port     = "22"
     }
   }
 }
