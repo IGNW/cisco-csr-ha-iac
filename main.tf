@@ -321,10 +321,11 @@ resource "null_resource" "iface1" {
 
   provisioner "remote-exec" {
     inline = [
-      "configure terminal"
-#      "interface GigabitEthernet2",
-#      "no shutdown",
-#      "ip address 10.16.3.252 255.255.255.0",
+      "term shell",
+      "configure terminal",
+      "interface GigabitEthernet2",
+      "no shutdown",
+      "ip address 10.16.3.252 255.255.255.0",
     ]
     connection {
       type     = "ssh"
@@ -332,39 +333,6 @@ resource "null_resource" "iface1" {
       private_key = file("${path.module}/csr.pem")
       user     = "ec2-user"
     }
-  }
-}
-
-resource "null_resource" "iface1" {
-  # Changes to any instance of interfaces
-  triggers = {
-    interface_changes = aws_network_interface.csr1000v1inside.id
-  }
-
-  #connection {
-  #  type     = "ssh"
-  #  host = join("", "${module.instance1.public_ip}")
-  #  private_key = file("${path.module}/csr.pem")
-  #  user     = "ec2-user"
-  #}
-
-  provisioner "local-exec" {
-    command = "echo \"${file(\"${path.module}/csr.pem\")}\" > tmp.csr && chmod 600 tmp.pem && ssh -vi tmp.pem ec2-user@18.237.107.172"
-  }
-
-#  provisioner "local-exec" {
-#    inline = [
-#       "configure terminal"
-##      "interface GigabitEthernet2",
-##      "no shutdown",
-##      "ip address 10.16.3.252 255.255.255.0",
-#    ]
-#    connection {
-#      type     = "ssh"
-#      host = join("", "${module.instance1.public_ip}")
-#      private_key = file("${path.module}/csr.pem")
-#      user     = "ec2-user"
-#    }
   }
 }
 
