@@ -323,20 +323,20 @@ resource "null_resource" "iface1" {
     command = "ssh -vi ~/Downloads/csr.pem ec2-user@18.237.107.172 'configure terminal end interface GigabitEthernet2'"
   }
 
-  #provisioner "remote-exec" {
-  #  inline = [
-  #    "term shell",
-  #    "configure terminal",
-  #    "interface GigabitEthernet2",
-  #    "no shutdown",
-  #    "ip address 10.16.3.252 255.255.255.0",
-  #  ]
-  #  connection {
-  #    type     = "ssh"
-  #    host = join("", "${module.instance1.public_ip}")
-  #    private_key = file("${path.module}/csr.pem")
-  #    user     = "ec2-user"
-  #  }
-  #}
+  provisioner "remote-exec" {
+    inline = [
+      "term shell",
+      "configure terminal",
+      "interface GigabitEthernet2",
+      "no shutdown",
+      "ip address 10.16.3.252 255.255.255.0",
+    ]
+    connection {
+      type     = "ssh"
+      host = join("", "${module.instance1.public_ip}")
+      private_key = file("${path.module}/csr.pem")
+      user     = "ec2-user"
+    }
+  }
 }
 
