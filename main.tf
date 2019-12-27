@@ -312,7 +312,7 @@ resource "null_resource" "iface1" {
   #  interface_changes = aws_network_interface.csr1000v1inside.id
   #}
   triggers = {
-    interface_changes = "abc"
+    interface_changes = "xabc"
   }
 
   #connection {
@@ -323,23 +323,23 @@ resource "null_resource" "iface1" {
   #}
 
   provisioner "local-exec" {
-    command = "chmod 600 csr.pem && ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@18.237.107.172 'configure terminal end interface GigabitEthernet2'"
+    command = "chmod 600 csr.pem && ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@18.237.107.172 'configure terminal end interface GigabitEthernet2 end no shutdown end ip address 10.16.3.252 255.255.255.0 end'"
   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "term shell",
-      "configure terminal",
-      "interface GigabitEthernet2",
-      "no shutdown",
-      "ip address 10.16.3.252 255.255.255.0",
-    ]
-    connection {
-      type     = "ssh"
-      host = join("", "${module.instance1.public_ip}")
-      private_key = file("${path.module}/csr.pem")
-      user     = "ec2-user"
-    }
-  }
+#  provisioner "remote-exec" {
+#    inline = [
+#      "term shell",
+#      "configure terminal",
+#      "interface GigabitEthernet2",
+#      "no shutdown",
+#      "ip address 10.16.3.252 255.255.255.0",
+#    ]
+#    connection {
+#      type     = "ssh"
+#      host = join("", "${module.instance1.public_ip}")
+#      private_key = file("${path.module}/csr.pem")
+#      user     = "ec2-user"
+#    }
+#  }
 }
 
