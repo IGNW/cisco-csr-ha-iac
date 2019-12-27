@@ -343,13 +343,6 @@ resource "null_resource" "sshconftest" {
     interface_changes = aws_network_interface.csr1000v1inside.id
   }
 
-  #connection {
-  #  type     = "ssh"
-  #  host = join("", "${module.instance1.public_ip}")
-  #  private_key = file("${path.module}/csr.pem")
-  #  user     = "ec2-user"
-  #}
-
   provisioner "local-exec" {
     command = "env | grep SSH"
   }
@@ -361,6 +354,4 @@ resource "null_resource" "sshconftest" {
       agent    = true
       agent_identity = "ec2-user"
     }
-  }
 }
-
