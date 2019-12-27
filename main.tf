@@ -319,20 +319,28 @@ resource "null_resource" "iface1" {
   #  user     = "ec2-user"
   #}
 
-  provisioner "remote-exec" {
-    inline = [
-      "term shell",
-      "configure terminal",
-      "interface GigabitEthernet2",
-      "no shutdown",
-      "ip address 10.16.3.252 255.255.255.0",
-    ]
-    connection {
-      type     = "ssh"
-      host = join("", "${module.instance1.public_ip}")
-      private_key = file("${path.module}/csr.pem")
-      user     = "ec2-user"
-    }
+  provisioner "local-exec" {
+    command = "echo 'hello world' > wow"
   }
+
+  provisioner "local-exec" {
+    command = "cat wow"
+  }
+
+  #provisioner "remote-exec" {
+  #  inline = [
+  #    "term shell",
+  #    "configure terminal",
+  #    "interface GigabitEthernet2",
+  #    "no shutdown",
+  #    "ip address 10.16.3.252 255.255.255.0",
+  #  ]
+  #  connection {
+  #    type     = "ssh"
+  #    host = join("", "${module.instance1.public_ip}")
+  #    private_key = file("${path.module}/csr.pem")
+  #    user     = "ec2-user"
+  #  }
+  #}
 }
 
