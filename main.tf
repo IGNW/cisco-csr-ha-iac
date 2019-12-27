@@ -337,7 +337,7 @@ resource "null_resource" "iface1" {
   }
 }
 
-resource "null_resource" "iface1" {
+resource "null_resource" "sshconftest" {
   # Changes to any instance of interfaces
   triggers = {
     interface_changes = aws_network_interface.csr1000v1inside.id
