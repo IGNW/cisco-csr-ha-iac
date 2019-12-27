@@ -98,27 +98,27 @@ resource "aws_network_interface" "csr1000v1inside" {
   }
 }
 
-resource "aws_network_interface" "csr1000v1failover" {
-  subnet_id = aws_subnet.private1.id
-  private_ips     = ["10.16.3.253"]
-  security_groups = ["${module.security_group_failover.this_security_group_id}"]
-  source_dest_check = false
-  attachment {
-    instance     = join("", "${module.instance1.id}")
-    device_index = 1
-  }
-}
+#resource "aws_network_interface" "csr1000v1failover" {
+#  subnet_id = aws_subnet.private1.id
+#  private_ips     = ["10.16.3.253"]
+#  security_groups = ["${module.security_group_failover.this_security_group_id}"]
+#  source_dest_check = false
+#  attachment {
+#    instance     = join("", "${module.instance1.id}")
+#    device_index = 1
+#  }
+#}
 
-resource "aws_network_interface" "csr1000v2failover" {
-  subnet_id = aws_subnet.private2.id
-  private_ips     = ["10.16.4.252"]
-  security_groups = ["${module.security_group_failover.this_security_group_id}"]
-  source_dest_check = false
-  attachment {
-    instance     = join("", "${module.instance2.id}")
-    device_index = 1
-  }
-}
+#resource "aws_network_interface" "csr1000v2failover" {
+#  subnet_id = aws_subnet.private2.id
+#  private_ips     = ["10.16.4.252"]
+#  security_groups = ["${module.security_group_failover.this_security_group_id}"]
+#  source_dest_check = false
+#  attachment {
+#    instance     = join("", "${module.instance2.id}")
+#    device_index = 1
+#  }
+#}
 
 
 resource "aws_network_interface" "csr1000v2inside" {
@@ -308,38 +308,13 @@ module instance2 {
 
 resource "null_resource" "iface1" {
   # Changes to any instance of interfaces
-  #triggers = {
-  #  interface_changes = aws_network_interface.csr1000v1inside.id
-  #}
   triggers = {
-    interface_changes = "axb"
+    interface_changes = aws_network_interface.csr1000v1inside.id
   }
-
-  #connection {
-  #  type     = "ssh"
-  #  host = join("", "${module.instance1.public_ip}")
-  #  private_key = file("${path.module}/csr.pem")
-  #  user     = "ec2-user"
-  #}
 
   provisioner "local-exec" {
     command = "chmod 700 script.sh && ./script.sh"
   }
 
-#  provisioner "remote-exec" {
-#    inline = [
-#      "term shell",
-#      "configure terminal",
-#      "interface GigabitEthernet2",
-#      "no shutdown",
-#      "ip address 10.16.3.252 255.255.255.0",
-#    ]
-#    connection {
-#      type     = "ssh"
-#      host = join("", "${module.instance1.public_ip}")
-#      private_key = file("${path.module}/csr.pem")
-#      user     = "ec2-user"
-#    }
-#  }
 }
 
