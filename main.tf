@@ -312,12 +312,12 @@ resource "null_resource" "iface1" {
     interface_changes = aws_network_interface.csr1000v1inside.id
   }
 
-  connection {
-    type     = "ssh"
-    host = join("", "${module.instance1.public_ip}")
-    private_key = file("${path.module}/csr.pem")
-    user     = "ec2-user"
-  }
+  #connection {
+  #  type     = "ssh"
+  #  host = join("", "${module.instance1.public_ip}")
+  #  private_key = file("${path.module}/csr.pem")
+  #  user     = "ec2-user"
+  #}
 
   provisioner "remote-exec" {
     inline = [
@@ -326,5 +326,11 @@ resource "null_resource" "iface1" {
       "no shutdown",
       "ip address 10.16.3.252 255.255.255.0"
     ]
+    connection {
+      type     = "ssh"
+      host = join("", "${module.instance1.public_ip}")
+      private_key = file("${path.module}/csr.pem")
+      user     = "ec2-user"
+    }
   }
 }
