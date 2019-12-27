@@ -313,7 +313,7 @@ resource "null_resource" "iface1" {
   }
 
   connection {
-    host = module.instance1.public_ip
+    host = "${module.instance1.public_ip}"
     private_key = file("${path.module}/csr.pem")
     user     = "ec2-user"
   }
