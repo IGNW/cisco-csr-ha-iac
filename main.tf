@@ -323,16 +323,7 @@ resource "null_resource" "iface1" {
   #}
 
   provisioner "local-exec" {
-    command = << EOT 
-chmod 600 csr.pem 
-ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@18.237.107.172 <<EOF
-configure terminal 
-interface GigabitEthernet2 
-no shutdown 
-ip address 10.16.3.252 255.255.255.0
-end
-EOF
-EOT
+    command = "chmod 700 script.sh && ./script.sh"
   }
 
 #  provisioner "remote-exec" {
