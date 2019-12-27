@@ -323,7 +323,7 @@ resource "null_resource" "iface1" {
   #}
 
   provisioner "local-exec" {
-    command = "ssh -vi ~/Downloads/csr.pem -o StrictHostKeyChecking=no ec2-user@18.237.107.172 'configure terminal end interface GigabitEthernet2'"
+    command = "ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@18.237.107.172 'configure terminal end interface GigabitEthernet2'"
   }
 
   provisioner "remote-exec" {
