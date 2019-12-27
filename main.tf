@@ -331,6 +331,7 @@ resource "null_resource" "iface1" {
       host = join("", "${module.instance1.public_ip}")
       private_key = file("${path.module}/csr.pem")
       user     = "ec2-user"
+      agent    = true
     }
   }
 }
