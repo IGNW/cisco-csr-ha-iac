@@ -305,10 +305,6 @@ module instance2 {
   #private_ip = "10.16.2.2"
 }
 
-variable iface1 {
-  type = string
-  default = module.instance1.public_ip
-}
 
 resource "null_resource" "iface1" {
   # Changes to any instance of interfaces
