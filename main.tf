@@ -304,3 +304,25 @@ module instance2 {
   vpc_security_group_ids = ["${module.security_group_outside.this_security_group_id}", "${module.ssh_security_group.this_security_group_id}"]
   #private_ip = "10.16.2.2"
 }
+
+
+resource "null_resource" "iface1" {
+  # Changes to any instance of interfaces
+  triggers = {
+    interface_changes = aws_network_interface.private1.id
+  }
+
+  connection {
+    host = module.instance1.public_ip
+    private_key = file("${path.module}/csr.pem")
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "configure terminal",
+      "interface GigabitEthernet2",
+      "no shutdown",
+      "ip address 10.16.3.252 255.255.255.0"
+    ]
+  }
+}
