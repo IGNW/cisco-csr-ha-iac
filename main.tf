@@ -306,36 +306,36 @@ module instance2 {
 }
 
 
-resource "null_resource" "iface1" {
-  # Changes to any instance of interfaces
-  triggers = {
-    interface_changes = aws_network_interface.csr1000v1inside.id
-  }
-
-  #connection {
-  #  type     = "ssh"
-  #  host = join("", "${module.instance1.public_ip}")
-  #  private_key = file("${path.module}/csr.pem")
-  #  user     = "ec2-user"
-  #}
-
-  provisioner "remote-exec" {
-    inline = [
-      "configure terminal",
-#      "interface GigabitEthernet2",
-#      "no shutdown",
-#      "ip address 10.16.3.252 255.255.255.0",
-    ]
-    connection {
-      type     = "ssh"
-      host = join("", "${module.instance1.public_ip}")
-      private_key = file("${path.module}/csr.pem")
-      user     = "ec2-user"
-      agent    = true
-      agent_identity = "ec2-user"
-    }
-  }
-}
+#resource "null_resource" "iface1" {
+#  # Changes to any instance of interfaces
+#  triggers = {
+#    interface_changes = aws_network_interface.csr1000v1inside.id
+#  }
+#
+#  #connection {
+#  #  type     = "ssh"
+#  #  host = join("", "${module.instance1.public_ip}")
+#  #  private_key = file("${path.module}/csr.pem")
+#  #  user     = "ec2-user"
+#  #}
+#
+#  provisioner "remote-exec" {
+#    inline = [
+#      "configure terminal",
+##      "interface GigabitEthernet2",
+##      "no shutdown",
+##      "ip address 10.16.3.252 255.255.255.0",
+#    ]
+#    connection {
+#      type     = "ssh"
+#      host = join("", "${module.instance1.public_ip}")
+#      private_key = file("${path.module}/csr.pem")
+#      user     = "ec2-user"
+#      agent    = true
+#      agent_identity = "ec2-user"
+#    }
+#  }
+#}
 
 resource "null_resource" "sshconftest" {
   # Changes to any instance of interfaces
@@ -351,7 +351,7 @@ resource "null_resource" "sshconftest" {
   #}
 
   provisioner "local-exec" {
-    command = "ssh-add -l"
+    command = "env | grep SSH"
   }
     connection {
       type     = "ssh"
