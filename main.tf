@@ -312,7 +312,7 @@ resource "null_resource" "iface1" {
   #  interface_changes = aws_network_interface.csr1000v1inside.id
   #}
   triggers = {
-    interface_changes = 'abc'
+    interface_changes = "abc"
   }
 
   #connection {
