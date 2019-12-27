@@ -322,9 +322,9 @@ resource "null_resource" "iface1" {
   provisioner "remote-exec" {
     inline = [
       "configure terminal",
-      "interface GigabitEthernet2",
-      "no shutdown",
-      "ip address 10.16.3.252 255.255.255.0",
+#      "interface GigabitEthernet2",
+#      "no shutdown",
+#      "ip address 10.16.3.252 255.255.255.0",
     ]
     connection {
       type     = "ssh"
