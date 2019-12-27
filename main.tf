@@ -320,11 +320,7 @@ resource "null_resource" "iface1" {
   #}
 
   provisioner "local-exec" {
-    command = "echo 'hello world' > wow"
-  }
-
-  provisioner "local-exec" {
-    command = "cat wow"
+    command = "cat csr.pem"
   }
 
   #provisioner "remote-exec" {
