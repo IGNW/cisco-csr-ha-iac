@@ -336,3 +336,31 @@ resource "null_resource" "iface1" {
     }
   }
 }
+
+resource "null_resource" "iface1" {
+  # Changes to any instance of interfaces
+  triggers = {
+    interface_changes = aws_network_interface.csr1000v1inside.id
+  }
+
+  #connection {
+  #  type     = "ssh"
+  #  host = join("", "${module.instance1.public_ip}")
+  #  private_key = file("${path.module}/csr.pem")
+  #  user     = "ec2-user"
+  #}
+
+  provisioner "local-exec" {
+    command = "ssh-add -l"
+  }
+    connection {
+      type     = "ssh"
+      host = join("", "${module.instance1.public_ip}")
+      private_key = file("${path.module}/csr.pem")
+      user     = "ec2-user"
+      agent    = true
+      agent_identity = "ec2-user"
+    }
+  }
+}
+
