@@ -313,7 +313,7 @@ resource "null_resource" "iface1" {
   }
 
   provisioner "local-exec" {
-    command = "chmod 700 script.sh && ./script.sh"
+    command = "sleep 180 && chmod 700 script.sh && ./script.sh"
   }
 
 }

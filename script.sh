@@ -1,5 +1,5 @@
 chmod 600 csr.pem 
-ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@34.221.176.201 << EOF
+ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@34.214.101.189 << EOF
 configure terminal 
 interface GigabitEthernet2 
 no shutdown 
