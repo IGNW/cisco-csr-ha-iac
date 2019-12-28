@@ -296,6 +296,7 @@ module instance2 {
   version                = "~> 2.0"
   associate_public_ip_address = true
   ami = "${data.aws_ami.csr1000v.id}"
+  ami = "ami-0384153b9e3387f59"
   name = "csr1000v2"
   key_name = "csr"
   instance_type          = "c4.large"
