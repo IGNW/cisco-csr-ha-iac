@@ -308,15 +308,15 @@ module instance2 {
 }
 
 
-resource "null_resource" "iface1" {
-  # Changes to any instance of interfaces
-  triggers = {
-    interface_changes = aws_network_interface.csr1000v1inside.id
-  }
-
-  provisioner "local-exec" {
-    command = "sleep 180 && chmod 700 script.sh && script.sh && ./script.sh"
-  }
-
-}
+#resource "null_resource" "iface1" {
+#  # Changes to any instance of interfaces
+#  triggers = {
+#    interface_changes = aws_network_interface.csr1000v1inside.id
+#  }
+#
+#  provisioner "local-exec" {
+#    command = "sleep 180 && chmod 700 script.sh && script.sh && ./script.sh"
+#  }
+#
+#}
 
