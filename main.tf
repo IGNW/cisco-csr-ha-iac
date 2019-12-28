@@ -279,7 +279,9 @@ data "aws_ami" "csr1000v" {
 
   filter {
     name   = "name"
-    values = ["cisco-CSR-.16.12.01a-BYOL-HVM-2-624f5bb1-7f8e-4f7c-ad2c-03ae1cd1c2d3-ami-0a35891127a1b85e1.4"]
+    #values = ["cisco-CSR-.16.12.01a-BYOL-HVM-2-624f5bb1-7f8e-4f7c-ad2c-03ae1cd1c2d3-ami-0a35891127a1b85e1.4"]
+     #values = ["cisco-CSR-.16.12.01a-SEC-HVM-dbfcb230-402e-49cc-857f-dacb4db08d34-ami-07e60a9fabe437907.4"] 
+     values = ["cisco-CSR-.16.12.01a-AX-HVM-9f5a4516-a4c3-4cf1-89d4-105d2200230e-ami-0f6fdba70c4443b5f.4"]
   }
 
   filter {
@@ -295,7 +297,8 @@ module instance2 {
   source                 = "terraform-aws-modules/ec2-instance/aws"
   version                = "~> 2.0"
   associate_public_ip_address = true
-  ami = "${data.aws_ami.csr1000v.id}"
+  #ami = "${data.aws_ami.csr1000v.id}"
+  ami = "ami-0384153b9e3387f59"
   name = "csr1000v2"
   key_name = "csr"
   instance_type          = "c4.large"
@@ -313,7 +316,7 @@ resource "null_resource" "iface1" {
   }
 
   provisioner "local-exec" {
-    command = "sleep 180 && chmod 700 script.sh && ./script.sh"
+    command = "chmod 700 script.sh && ./script.sh"
   }
 
 }
