@@ -279,8 +279,7 @@ data "aws_ami" "csr1000v" {
 
   filter {
     name   = "name"
-    #values = ["cisco-CSR-.16.12.01a-BYOL-HVM-2-624f5bb1-7f8e-4f7c-ad2c-03ae1cd1c2d3-ami-0a35891127a1b85e1.4"]
-     values = ["cisco-CSR-.16.12.01a-SEC-HVM-dbfcb230-402e-49cc-857f-dacb4db08d34-ami-07e60a9fabe437907.4"] 
+    values = ["cisco-CSR-.16.12.01a-BYOL-HVM-2-624f5bb1-7f8e-4f7c-ad2c-03ae1cd1c2d3-ami-0a35891127a1b85e1.4"]
   }
 
   filter {
