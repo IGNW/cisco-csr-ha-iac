@@ -11,6 +11,7 @@ interface GigabitEthernet2
 no shutdown 
 ip address ${csrv1_eth1_private} 255.255.255.0 
 end
+exit
 EOF
 until [ $test ]; do
   echo 'no csr_aws_ha package found, trying again'
