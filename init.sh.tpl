@@ -12,14 +12,14 @@ no shutdown
 ip address ${csrv1_eth1_private} 255.255.255.0 
 end
 EOF
-until [ $$test ]; do
+until [ $test ]; do
   echo 'no csr_aws_ha package found, trying again'
   ssh -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' > ok
   ssh -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip freeze' > ok
-  for i in $$(<ok);
+  for i in $(<ok);
   do
-    package=$$(echo "$$i" | awk -F '=' '{print $$1}')
-    if [ "$$package" = "csr-aws-ha" ]
+    package=$(echo "$i" | awk -F '=' '{print $1}')
+    if [ "$package" = "csr-aws-ha" ]
     then
       echo 'package found'
       test=1
@@ -73,7 +73,6 @@ end
 
 guestshell
 create_node.py -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv1_eth1_eni}
-exit
 EOF
 
 until ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} 'guestshell enable'; do
@@ -86,14 +85,14 @@ no shutdown
 ip address ${csrv2_eth1_private} 255.255.255.0 
 end
 EOF
-until [ $$test ]; do
+until [ $test ]; do
   echo 'no csr_aws_ha package found, trying again'
   ssh -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' > ok
   ssh -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip freeze' > ok
   for i in $(<ok);
   do
-    package=$(echo "$$i" | awk -F '=' '{print $$1}')
-    if [ "$$package" = "csr-aws-ha" ]
+    package=$(echo "$i" | awk -F '=' '{print $1}')
+    if [ "$package" = "csr-aws-ha" ]
     then
       echo 'package found'
       test=1
@@ -102,7 +101,6 @@ until [ $$test ]; do
   done
 done
 ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
-exit
 configure terminal
 interface GigabitEthernet2
 no shutdown
@@ -153,5 +151,4 @@ end
 
 guestshell
 create_node.py -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv2_eth1_eni}
-exit
 EOF
