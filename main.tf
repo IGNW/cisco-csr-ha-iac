@@ -287,7 +287,8 @@ data "aws_ami" "csr1000v" {
 resource "null_resource" "iface1" {
   # Changes to any instance of interfaces
   triggers = {
-    interface_changes = aws_network_interface.csr1000v1eth1.id
+    #interface_changes = aws_network_interface.csr1000v1eth1.id
+    interface_changes = "ass;dlkfj"
   }
 
   provisioner "local-exec" {
