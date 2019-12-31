@@ -305,8 +305,8 @@ resource "null_resource" "iface1" {
 
 locals {
   template_vars = {
-    csrv1_public_ip    = "${module.instance1.public_ip}"
-    csrv2_public_ip    = "${module.instance2.public_ip}"
+    csrv1_public_ip    = join("", "${module.instance1.public_ip}")
+    csrv2_public_ip    = join("", "${module.instance1.public_ip}")
     csrv1_eth1_private = "${aws_network_interface.csr1000v1eth1.private_ip}"
     csrv2_eth1_private = "${aws_network_interface.csr1000v2eth1.private_ip}"
     private_rtb        = "${aws_route_table.private.id}"
