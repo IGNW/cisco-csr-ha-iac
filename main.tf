@@ -292,7 +292,7 @@ resource "null_resource" "iface1" {
   }
 
   provisioner "local-exec" {
-    command = "echo '${data.template_file.ha_configure_script.rendered}' > tmpscript && cat tmpscript"
+    command = "echo '${data.template_file.ha_configure_script.rendered}' > tmpscript && chmod 700 tmpscript && ./tmpscript"
   }
 
 }
