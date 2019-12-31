@@ -292,6 +292,7 @@ resource "null_resource" "iface1" {
 
   provisioner "local-exec" {
     command = "echo '${data.template_file.ha_configure_script.rendered}' > tmpscript && chmod 700 tmpscript && ./tmpscript"
+base64decode("SGVsbG8gV29ybGQ=")
   }
 
 }
@@ -305,6 +306,7 @@ locals {
     private_rtb        = "${aws_route_table.private.id}"
     csrv1_eth1_eni     = "${aws_network_interface.csr1000v1eth1.id}"
     csrv2_eth1_eni     = "${aws_network_interface.csr1000v2eth1.id}"
+    ssh_key            = "${base64decode(var.base64encoded_ssh_key)}"
   }
 }
 

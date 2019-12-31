@@ -1,3 +1,6 @@
+cat <<EOF >> csr.pem
+${ssh_key}
+EOF
 chmod 600 csr.pem 
 until ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} 'guestshell enable'; do
     sleep 5
