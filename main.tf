@@ -300,7 +300,7 @@ resource "null_resource" "iface1" {
 data "template_file" "ha_configure_script" {
   template = "${file("${path.module}/init.sh.tpl")}"
   vars = {
-    csrv1_public_ip = module.instance1.public_ip
+    csrv1_public_ip = "${module.instance1.public_ip}"
     csrv2_public_ip = module.instance2.public_ip
     csrv1_eth1_private = aws_network_interface.csr1000v1eth1.private_ip
     csrv2_eth1_private = aws_network_interface.csr1000v2eth1.private_ip
