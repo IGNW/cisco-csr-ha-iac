@@ -8,11 +8,11 @@ interface GigabitEthernet2
 no shutdown 
 ip address ${csrv1_eth1_private} 255.255.255.0 
 end
-
-guestshell
-pip install csr_aws_ha --user
-exit
-
+EOF
+sleep 20
+ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
+guestshell enable
+guestshell run pip install csr_aws_ha --user
 configure terminal
 crypto isakmp policy 1
 encr aes 256
@@ -69,10 +69,11 @@ interface GigabitEthernet2
 no shutdown 
 ip address ${csrv2_eth1_private} 255.255.255.0 
 end
-guestshell
-pip install csr_aws_ha --user
-exit
-
+EOF
+sleep 20
+ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
+guestshell enable
+guestshell run pip install csr_aws_ha --user
 configure terminal
 interface GigabitEthernet2
 no shutdown
