@@ -1,5 +1,5 @@
 chmod 600 csr.pem 
-until ssh -vi csr.pem -o ClientAliveInterval=10 -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip}; do
+until ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip}; do
     sleep 5
 done
 #ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
