@@ -15,7 +15,9 @@ exit
 EOF
 until [ $test ]; do
   echo 'no csr_aws_ha package found, trying again'
-  ssh -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' > ok
+  ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
+  guestshell enable
+  EOF
   ssh -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip freeze' > ok
   for i in $(<ok);
   do
@@ -28,7 +30,6 @@ until [ $test ]; do
     fi
   done
 done
-
 ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
 configure terminal
 crypto isakmp policy 1
@@ -89,7 +90,9 @@ end
 EOF
 until [ $test ]; do
   echo 'no csr_aws_ha package found, trying again'
-  ssh -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' > ok
+  ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
+  guestshell enable
+  EOF
   ssh -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip freeze' > ok
   for i in $(<ok);
   do
