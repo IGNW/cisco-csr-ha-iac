@@ -311,5 +311,5 @@ locals {
 
 data "template_file" "ha_configure_script" {
   template = "${file("${path.module}/init.sh.tpl")}"
-  vars = "{local.template_vars}"
+  vars = "${local.template_vars}"
 }
