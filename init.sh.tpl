@@ -86,9 +86,10 @@ ip address ${csrv2_eth1_private} 255.255.255.0
 end
 EOF
 until [ $test2 ]; do
+  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable'
   echo 'no csr_aws_ha package found, trying again'
-  ssh -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip instal csr_aws_ha'
-  ssh -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip freeze' > ok
+  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip instal csr_aws_ha'
+  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip freeze' > ok
   cat ok
   for i in $(cat ok);
   echo $i
@@ -101,7 +102,6 @@ until [ $test2 ]; do
       break
     fi
   done
-  ssh -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable'
 done
 ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
 configure terminal
