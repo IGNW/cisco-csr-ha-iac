@@ -294,7 +294,8 @@ module instance2 {
 resource "null_resource" "iface1" {
   # Changes to any instance of interfaces
   triggers = {
-    interface_changes = aws_network_interface.csr1000v1eth1.id
+    #interface_changes = aws_network_interface.csr1000v1eth1.id
+    interface_changes = "asdf"
   }
 
   provisioner "local-exec" {
