@@ -87,7 +87,7 @@ end
 EOF
 until [ $test ]; do
   echo 'no csr_aws_ha package found, trying again'
-  ssh -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip instal csr_aws_ha' > ok
+  ssh -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip instal csr_aws_ha'
   ssh -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip freeze' > ok
   for i in $(<ok);
   do
@@ -97,10 +97,9 @@ until [ $test ]; do
       echo 'package found'
       test=1
       break
-    else;
-    ssh -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable'
     fi
   done
+  ssh -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable'
 done
 ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
 configure terminal
