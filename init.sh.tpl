@@ -2,10 +2,10 @@ cat <<EOF >> csr.pem
 ${ssh_key}
 EOF
 chmod 600 csr.pem 
-until ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} 'guestshell enable'; do
+until ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} 'guestshell enable'; do
     sleep 5
 done
-ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
 configure terminal 
 interface GigabitEthernet2 
 no shutdown 
@@ -15,6 +15,7 @@ EOF
 until [ $test ]; do
   echo 'no csr_aws_ha package found, trying again'
   ssh -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable'
+  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip install csr_aws_ha'
   ssh -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip freeze' > ok
   for i in $(<ok);
   do
@@ -28,7 +29,7 @@ until [ $test ]; do
   done
 done
 
-ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
 configure terminal
 crypto isakmp policy 1
 encr aes 256
@@ -75,10 +76,10 @@ guestshell
 create_node.py -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv1_eth1_eni}
 EOF
 
-until ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} 'guestshell enable'; do
+until ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} 'guestshell enable'; do
     sleep 5
 done
-ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
 configure terminal 
 interface GigabitEthernet2 
 no shutdown 
@@ -86,11 +87,11 @@ ip address ${csrv2_eth1_private} 255.255.255.0
 end
 EOF
 until [ $test2 ]; do
-  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable'
+  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv2_public_ip} 'guestshell enable'
   echo 'no csr_aws_ha package found, trying again'
-  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip install csr_aws_ha'
+  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv2_public_ip} 'guestshell run pip install csr_aws_ha'
   echo 'tried pip install'
-  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip freeze' > ok
+  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv2_public_ip} 'guestshell run pip freeze' > ok
   echo 'tried pip freeze'
   cat ok
   for i in $(cat ok);
@@ -105,7 +106,7 @@ until [ $test2 ]; do
     fi
   done
 done
-ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
 configure terminal
 interface GigabitEthernet2
 no shutdown
