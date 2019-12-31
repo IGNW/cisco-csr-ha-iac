@@ -88,8 +88,10 @@ EOF
 until [ $test2 ]; do
   ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable'
   echo 'no csr_aws_ha package found, trying again'
-  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip instal csr_aws_ha'
+  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip install csr_aws_ha'
+  echo 'tried pip install'
   ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip freeze' > ok
+  echo 'tried pip freeze'
   cat ok
   for i in $(cat ok);
   echo $i
