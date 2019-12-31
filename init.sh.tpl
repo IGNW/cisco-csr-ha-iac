@@ -1,5 +1,5 @@
 chmod 600 csr.pem 
-until -vi csr.pem -o ClientAliveInterval=10 -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip}; do
+until ssh -vi csr.pem -o ClientAliveInterval=10 -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip}; do
     sleep 5
 done
 #ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
@@ -61,7 +61,7 @@ create_node.py -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv1_eth1_eni}
 exit
 EOF
 
-until -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip}; do
+until ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip}; do
     sleep 5
 done
 #ssh -vi csr.pem -o ClientAliveInterval=10 -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
