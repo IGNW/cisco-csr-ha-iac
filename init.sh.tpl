@@ -9,13 +9,23 @@ no shutdown
 ip address ${csrv1_eth1_private} 255.255.255.0 
 end
 EOF
-## Long sleep here to the routers to get ready. Guestshell takes time
-sleep 180
+until [ $test ]; do
+  echo 'no csr_aws_ha package found, trying again'
+  ssh -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' > ok
+  ssh -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip freeze' > ok
+  for i in $(<ok);
+  do
+    package=$(echo "$i" | awk -F '=' '{print $1}')
+    if [ "$package" = "csr-aws-ha" ]
+    then
+      echo 'package found'
+      test=1
+      break
+    fi
+  done
+done
+
 ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
-guestshell enable
-guestshell 
-pip install csr_aws_ha --user
-exit
 configure terminal
 crypto isakmp policy 1
 encr aes 256
@@ -73,11 +83,22 @@ no shutdown
 ip address ${csrv2_eth1_private} 255.255.255.0 
 end
 EOF
-sleep 20
+until [ $test ]; do
+  echo 'no csr_aws_ha package found, trying again'
+  ssh -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' > ok
+  ssh -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip freeze' > ok
+  for i in $(<ok);
+  do
+    package=$(echo "$i" | awk -F '=' '{print $1}')
+    if [ "$package" = "csr-aws-ha" ]
+    then
+      echo 'package found'
+      test=1
+      break
+    fi
+  done
+done
 ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
-guestshell enable
-guestshell 
-pip install csr_aws_ha --user
 exit
 configure terminal
 interface GigabitEthernet2
