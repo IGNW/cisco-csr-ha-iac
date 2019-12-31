@@ -1,5 +1,5 @@
 variable "availability_zone" {
-  defalt = "us-west-2a"
+  default = "us-west-2a"
 }
 
 variable "private_vpc_cidr_block" {
