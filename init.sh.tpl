@@ -13,7 +13,9 @@ EOF
 sleep 180
 ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
 guestshell enable
-guestshell run pip install csr_aws_ha --user
+guestshell 
+pip install csr_aws_ha --user
+exit
 configure terminal
 crypto isakmp policy 1
 encr aes 256
@@ -74,7 +76,9 @@ EOF
 sleep 20
 ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
 guestshell enable
-guestshell run pip install csr_aws_ha --user
+guestshell 
+pip install csr_aws_ha --user
+exit
 configure terminal
 interface GigabitEthernet2
 no shutdown
