@@ -1,5 +1,5 @@
 chmod 600 csr.pem 
-until ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} 'configure terminal'; do
+until ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} 'guestshell enable'; do
     sleep 5
 done
 ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
@@ -9,7 +9,6 @@ no shutdown
 ip address ${csrv1_eth1_private} 255.255.255.0 
 end
 
-guestshell enable
 guestshell
 pip install csr_aws_ha --user
 exit
@@ -61,7 +60,7 @@ create_node.py -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv1_eth1_eni}
 exit
 EOF
 
-until ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} 'configure terminal'; do
+until ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} 'guestshell enable'; do
     sleep 5
 done
 ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
@@ -70,7 +69,6 @@ interface GigabitEthernet2
 no shutdown 
 ip address ${csrv2_eth1_private} 255.255.255.0 
 end
-guestshell enable
 guestshell
 pip install csr_aws_ha --user
 exit
