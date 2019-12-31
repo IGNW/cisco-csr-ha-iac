@@ -2,8 +2,7 @@ cat <<EOF >> csr.pem
 ${ssh_key}
 EOF
 chmod 600 csr.pem 
-until ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} 'guestshell enable'
-do
+until ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} 'guestshell enable'; do
     sleep 5
 done
 ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
@@ -15,9 +14,7 @@ end
 EOF
 until [ $test ]; do
   echo 'no csr_aws_ha package found, trying again'
-  ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
-  guestshell enable
-  EOF
+  ssh -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' > ok
   ssh -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip freeze' > ok
   for i in $(<ok);
   do
@@ -30,6 +27,7 @@ until [ $test ]; do
     fi
   done
 done
+
 ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
 configure terminal
 crypto isakmp policy 1
@@ -90,9 +88,7 @@ end
 EOF
 until [ $test ]; do
   echo 'no csr_aws_ha package found, trying again'
-  ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
-  guestshell enable
-  EOF
+  ssh -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' > ok
   ssh -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip freeze' > ok
   for i in $(<ok);
   do
@@ -157,4 +153,5 @@ end
 
 guestshell
 create_node.py -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv2_eth1_eni}
+exit
 EOF
