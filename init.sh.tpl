@@ -1,9 +1,9 @@
 chmod 600 csr.pem 
-ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${var.csrv1_public_ip} << EOF
+ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
 configure terminal 
 interface GigabitEthernet2 
 no shutdown 
-ip address ${var.csrv1_eth1_private} 255.255.255.0 
+ip address ${csrv1_eth1_private} 255.255.255.0 
 end
 
 guestshell enable
@@ -33,11 +33,11 @@ end
 
 configure terminal
 interface Tunnel1
-ip address ${var.csrv1_eth1_private} 255.255.255.252.
+ip address ${csrv1_eth1_private} 255.255.255.252.
 load-interval 30
 tunnel source GigabitEthernet1
 tunnel mode ipsec ipv4
-tunnel destination ${var.csrv2_public_ip} 
+tunnel destination ${csrv2_public_ip} 
 tunnel protection ipsec profile vti-1
 bfd interval 100 min_rx 100 multiplier 3
 end
@@ -50,19 +50,19 @@ end
 
 configure terminal
 redundancy
-cloud-ha bfd peer ${var.csrv2_eth1_private}
+cloud-ha bfd peer ${csrv2_eth1_private}
 end
 
 guestshell
-create_node.py -i 2 -t ${var.private_rtb} -rg us-west-2 -n ${var.csrv1_eth1_eni}
+create_node.py -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv1_eth1_eni}
 exit
 EOF
 
-ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${var.csrv2_public_ip} << EOF
+ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
 configure terminal 
 interface GigabitEthernet2 
 no shutdown 
-ip address ${var.csrv2_eth1_private} 255.255.255.0 
+ip address ${csrv2_eth1_private} 255.255.255.0 
 end
 guestshell enable
 guestshell
@@ -72,7 +72,7 @@ exit
 configure terminal
 interface GigabitEthernet2
 no shutdown
-ip address ${var.csrv2_eth1_private} 255.255.255.0
+ip address ${csrv2_eth1_private} 255.255.255.0
 end
 
 configure terminal
@@ -97,11 +97,11 @@ end
 
 configure terminal
 interface Tunnel1
-ip address ${var.csrv2_eth1_private} 255.255.255.252.
+ip address ${csrv2_eth1_private} 255.255.255.252.
 load-interval 30
 tunnel source GigabitEthernet1
 tunnel mode ipsec ipv4
-tunnel destination ${var.csrv1_public_ip} 
+tunnel destination ${csrv1_public_ip} 
 tunnel protection ipsec profile vti-1
 bfd interval 100 min_rx 100 multiplier 3
 end
@@ -114,10 +114,10 @@ end
 
 configure terminal
 redundancy
-cloud-ha bfd peer ${var.csrv1_eth1_private}
+cloud-ha bfd peer ${csrv1_eth1_private}
 end
 
 guestshell
-create_node.py -i 2 -t ${var.private_rtb} -rg us-west-2 -n ${var.csrv2_eth1_eni}
+create_node.py -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv2_eth1_eni}
 exit
 EOF
