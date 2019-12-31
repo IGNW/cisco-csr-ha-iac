@@ -9,7 +9,8 @@ no shutdown
 ip address ${csrv1_eth1_private} 255.255.255.0 
 end
 EOF
-sleep 20
+## Long sleep here to the routers to get ready. Guestshell takes time
+sleep 180
 ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
 guestshell enable
 guestshell run pip install csr_aws_ha --user
