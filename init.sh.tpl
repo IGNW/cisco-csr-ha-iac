@@ -2,7 +2,8 @@ cat <<EOF >> csr.pem
 ${ssh_key}
 EOF
 chmod 600 csr.pem 
-until ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} 'guestshell enable'; do
+until ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} 'guestshell enable'
+do
     sleep 5
 done
 ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
@@ -11,7 +12,6 @@ interface GigabitEthernet2
 no shutdown 
 ip address ${csrv1_eth1_private} 255.255.255.0 
 end
-exit
 EOF
 until [ $test ]; do
   echo 'no csr_aws_ha package found, trying again'
