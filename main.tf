@@ -87,7 +87,7 @@ resource "aws_route_table" "private" {
   }
 }
 
-resource "aws_network_interface" "csr1000v1inside" {
+resource "aws_network_interface" "csr1000v1eth1" {
   subnet_id = aws_subnet.private1.id
   security_groups = ["${module.security_group_inside.this_security_group_id}"]
   private_ips     = ["10.16.3.252"]
@@ -98,30 +98,7 @@ resource "aws_network_interface" "csr1000v1inside" {
   }
 }
 
-#resource "aws_network_interface" "csr1000v1failover" {
-#  subnet_id = aws_subnet.private1.id
-#  private_ips     = ["10.16.3.253"]
-#  security_groups = ["${module.security_group_failover.this_security_group_id}"]
-#  source_dest_check = false
-#  attachment {
-#    instance     = join("", "${module.instance1.id}")
-#    device_index = 1
-#  }
-#}
-
-#resource "aws_network_interface" "csr1000v2failover" {
-#  subnet_id = aws_subnet.private2.id
-#  private_ips     = ["10.16.4.252"]
-#  security_groups = ["${module.security_group_failover.this_security_group_id}"]
-#  source_dest_check = false
-#  attachment {
-#    instance     = join("", "${module.instance2.id}")
-#    device_index = 1
-#  }
-#}
-
-
-resource "aws_network_interface" "csr1000v2inside" {
+resource "aws_network_interface" "csr1000v2eth1" {
   subnet_id = aws_subnet.private2.id
   private_ips     = ["10.16.4.253"]
   security_groups = ["${module.security_group_inside.this_security_group_id}"]
@@ -308,15 +285,27 @@ module instance2 {
 }
 
 
-#resource "null_resource" "iface1" {
-#  # Changes to any instance of interfaces
-#  triggers = {
-#    interface_changes = aws_network_interface.csr1000v1inside.id
-#  }
-#
-#  provisioner "local-exec" {
-#    command = "sleep 180 && chmod 700 script.sh && script.sh && ./script.sh"
-#  }
-#
-#}
+resource "null_resource" "iface1" {
+  # Changes to any instance of interfaces
+  triggers = {
+    interface_changes = aws_network_interface.csr1000v1eth1.id
+  }
 
+  provisioner "local-exec" {
+    command = "echo '${data.template_file.ha_configure_script.rendered}' > tmpscript && cat tmpscript"
+  }
+
+}
+
+data "template_file" "ha_configure_script" {
+  template = "${file("${path.module}/init.sh.tpl")}"
+  vars = {
+    csrv1_public_ip = module.instance1.public_ip
+    csrv2_public_ip = module.instance2.public_ip
+    csrv1_eth1_private = aws_network_interface.csr1000v1eth1.private_ip
+    csrv2_eth1_private = aws_network_interface.csr1000v2eth1.private_ip
+    private_rtb = aws_route_table.private.id
+    csrv1_eth1_eni = aws_network_interface.csr1000v1eth1.id
+    csrv2_eth1_eni = aws_network_interface.csr1000v2eth1.id
+  }
+}
