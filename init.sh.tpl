@@ -157,5 +157,4 @@ end
 
 guestshell
 create_node.py -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv2_eth1_eni}
-exit
 EOF
