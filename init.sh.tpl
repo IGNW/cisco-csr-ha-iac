@@ -1,8 +1,7 @@
 chmod 600 csr.pem 
-until ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip}; do
+until ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} 'configure terminal'; do
     sleep 5
 done
-exit
 ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
 configure terminal 
 interface GigabitEthernet2 
@@ -62,10 +61,9 @@ create_node.py -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv1_eth1_eni}
 exit
 EOF
 
-until ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip}; do
+until ssh -vi csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} 'configure terminal'; do
     sleep 5
 done
-exit
 ssh -vi csr.pem -o ClientAliveInterval=10 -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
 configure terminal 
 interface GigabitEthernet2 
