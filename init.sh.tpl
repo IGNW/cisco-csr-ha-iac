@@ -14,7 +14,7 @@ end
 EOF
 until [ $test ]; do
   echo 'no csr_aws_ha package found, trying again'
-  ssh -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' > ok
+  ssh -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable'
   ssh -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip freeze' > ok
   for i in $(<ok);
   do
