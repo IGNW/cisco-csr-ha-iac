@@ -2,6 +2,8 @@ variable "availability_zone" {
   default = "us-west-2a"
 }
 
+variable "base64encoded_ssh_key" {}
+
 variable "private_vpc_cidr_block" {
   default = "10.16.0.0/16"
 }

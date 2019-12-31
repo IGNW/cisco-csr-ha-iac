@@ -54,7 +54,7 @@ resource "aws_vpc" "private" {
 resource "aws_subnet" "private1" {
   vpc_id            = "${aws_vpc.private.id}"
   availability_zone = "us-west-2a"
-  cidr_block = "${var.node1_private_cidr_block}"
+  cidr_block        = "${var.node1_private_cidr_block}"
   tags = {
     Name = "csrv1000vprivatesubnet1"
   }
@@ -68,7 +68,7 @@ resource "aws_route_table_association" "private1" {
 resource "aws_subnet" "private2" {
   vpc_id            = "${aws_vpc.private.id}"
   availability_zone = "us-west-2a"
-  cidr_block = "${var.node2_private_cidr_block}"
+  cidr_block        = "${var.node2_private_cidr_block}"
   tags = {
     Name = "csrv1000vprivatesubnet2"
   }
@@ -201,11 +201,11 @@ module "ssh_security_group" {
 }
 
 module "security_group_inside" {
-  source  = "terraform-aws-modules/security-group/aws"
-  version = "~> 3.0"
-  name        = "csrinside"
-  description = "Security group for private interface of csr1000v"
-  vpc_id      = "${aws_vpc.private.id}"
+  source              = "terraform-aws-modules/security-group/aws"
+  version             = "~> 3.0"
+  name                = "csrinside"
+  description         = "Security group for private interface of csr1000v"
+  vpc_id              = "${aws_vpc.private.id}"
   ingress_cidr_blocks = ["${aws_vpc.private.cidr_block}"]
   ingress_rules       = ["all-all"]
   egress_rules        = ["all-all"]
@@ -249,7 +249,7 @@ module instance1 {
   key_name                    = "csr"
   iam_instance_profile        = "${aws_iam_instance_profile.csr1000v.name}"
   associate_public_ip_address = true
-  vpc_security_group_ids = ["${module.security_group_outside.this_security_group_id}", "${module.ssh_security_group.this_security_group_id}"]
+  vpc_security_group_ids      = ["${module.security_group_outside.this_security_group_id}", "${module.ssh_security_group.this_security_group_id}"]
 }
 
 module instance2 {
@@ -269,7 +269,7 @@ data "aws_ami" "csr1000v" {
   most_recent = true
 
   filter {
-    name = "name"
+    name   = "name"
     values = ["cisco-CSR-.16.12.01a-AX-HVM-9f5a4516-a4c3-4cf1-89d4-105d2200230e-ami-0f6fdba70c4443b5f.4"]
   }
 
@@ -292,7 +292,6 @@ resource "null_resource" "iface1" {
 
   provisioner "local-exec" {
     command = "echo '${data.template_file.ha_configure_script.rendered}' > tmpscript && chmod 700 tmpscript && ./tmpscript"
-base64decode("SGVsbG8gV29ybGQ=")
   }
 
 }
