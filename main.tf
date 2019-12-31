@@ -297,15 +297,43 @@ resource "null_resource" "iface1" {
 
 }
 
+variable csrv1_public_ip {
+  default = module.instance1.public_ip
+}
+
+variable csrv2_public_ip {
+  default = module.instance2.public_ip
+}
+
+variable csrv1_eth1_priv {
+  default = aws_network_interface.csr1000v1eth1.private_ip
+}
+
+variable csrv2_eth1_priv {
+  default = aws_network_interface.csr1000v2eth1.private_ip
+}
+
+variable private_rtb     {
+  default = aws_route_table.private.id
+}
+
+variable csrv1_eth1_eni  {
+  default = aws_network_interface.csr1000v1eth1.id
+}
+
+variable csrv2_eth1_eni  {
+  default = aws_network_interface.csr1000v2eth1.id
+}
+
 data "template_file" "ha_configure_script" {
   template = "${file("${path.module}/init.sh.tpl")}"
   vars = {
-    csrv1_public_ip = "${module.instance1.public_ip}"
-    csrv2_public_ip = module.instance2.public_ip
-    csrv1_eth1_private = aws_network_interface.csr1000v1eth1.private_ip
-    csrv2_eth1_private = aws_network_interface.csr1000v2eth1.private_ip
-    private_rtb = aws_route_table.private.id
-    csrv1_eth1_eni = aws_network_interface.csr1000v1eth1.id
-    csrv2_eth1_eni = aws_network_interface.csr1000v2eth1.id
+    csrv1_public_ip = var.csrv1_public_ip
+    csrv2_public_ip = var.csrv2_public_ip 
+    csrv1_eth1_private = var.csrv1_eth1_private 
+    csrv2_eth1_private = var.csrv2_eth1_private 
+    private_rtb = var.private_rtb 
+    csrv1_eth1_eni = var.csrv1_eth1_eni 
+    csrv2_eth1_eni = var.csrv2_eth1_eni 
   }
 }
