@@ -18,8 +18,8 @@ until [ $test ]; do
   ssh -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip freeze' > ok
   for i in $(<ok);
   do
-    package=$(echo "$i" | awk -F '=' '{print $1}')
-    if [ "$package" = "csr-aws-ha" ]
+    package=$(echo "$$i" | awk -F '=' '{print $$1}')
+    if [ "$$package" = "csr-aws-ha" ]
     then
       echo 'package found'
       test=1
@@ -92,8 +92,8 @@ until [ $test ]; do
   ssh -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip freeze' > ok
   for i in $(<ok);
   do
-    package=$(echo "$i" | awk -F '=' '{print $1}')
-    if [ "$package" = "csr-aws-ha" ]
+    package=$(echo "$$i" | awk -F '=' '{print $$1}')
+    if [ "$$package" = "csr-aws-ha" ]
     then
       echo 'package found'
       test=1
