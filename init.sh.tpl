@@ -7,21 +7,16 @@ ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} 'guestshe
 until ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} 'guestshell enable'; do
     sleep 5
 done
-ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
+term_config="$(cat <<-EOF
 configure terminal 
 interface GigabitEthernet2 
 no shutdown 
 ip address ${csrv1_eth1_private} 255.255.255.0 
 end
 EOF
-v="$(cat <<-EOF
-    A
-        B
-    C
-EOF
 )"
 function test () {
-  echo $1
+  ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} $term_config
 }
 test $v
 #until [ $test ]; do
