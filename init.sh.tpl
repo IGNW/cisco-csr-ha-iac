@@ -12,10 +12,10 @@ no shutdown
 ip address ${csrv1_eth1_private} 255.255.255.0 
 end
 EOF
+ssh -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' &&
+echo "Tried to enable guestshell"
 until [ $test ]; do
   echo 'no csr_aws_ha package found, trying again'
-  ssh -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' &&
-  echo "Tried to enable guestshell"
   ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip install csr_aws_ha --user'
   echo 'tried pip install'
   ssh -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip freeze' > ok
