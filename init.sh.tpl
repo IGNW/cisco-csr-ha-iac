@@ -24,79 +24,79 @@ function test () {
   echo $1
 }
 test $v
-until [ $test ]; do
-  echo 'no csr_aws_ha package found, trying again'
-  ssh -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
-  guestshell enable
-  EOF
-  echo "Tried to enable guestshell"
-  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
-  guestshell run pip install csr_aws_ha --user
-  EOF
-  echo 'tried pip install'
-  ssh -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
-  guestshell run pip freeze 
-  EOF
-  echo 'tried pip freeze'
-  cat ok
-  for i in $(<ok);
-  do
-    package=$(echo "$i" | awk -F '=' '{print $1}')
-    if [ "$package" = "csr-aws-ha" ]
-    then
-      echo 'package found'
-      test=1
-      break
-    fi
-  done
-done
-
-ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
-configure terminal
-crypto isakmp policy 1
-encr aes 256
-authentication pre-share
-crypto isakmp key cisco address 0.0.0.0
-end
-
-configure terminal
-crypto ipsec transform-set uni-perf esp-aes 256 esp-sha-hmac
-mode tunnel
-end
-
-configure terminal
-crypto ipsec profile vti-1
-set security-association lifetime kilobytes disable
-set security-association lifetime seconds 86400
-set transform-set uni-perf
-set pfs group2
-end
-
-configure terminal
-interface Tunnel1
-ip address ${csrv1_eth1_private} 255.255.255.252.
-load-interval 30
-tunnel source GigabitEthernet1
-tunnel mode ipsec ipv4
-tunnel destination ${csrv2_public_ip} 
-tunnel protection ipsec profile vti-1
-bfd interval 100 min_rx 100 multiplier 3
-end
-
-configure terminal
-router eigrp 1
-network 192.168.101.0 0.0.0.255
-bfd all-interfaces
-end
-
-configure terminal
-redundancy
-cloud-ha bfd peer ${csrv2_eth1_private}
-end
-
-guestshell
-create_node.py -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv1_eth1_eni}
-EOF
+#until [ $test ]; do
+#  echo 'no csr_aws_ha package found, trying again'
+#  ssh -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
+#  guestshell enable
+#  EOF
+#  echo "Tried to enable guestshell"
+#  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
+#  guestshell run pip install csr_aws_ha --user
+#  EOF
+#  echo 'tried pip install'
+#  ssh -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
+#  guestshell run pip freeze 
+#  EOF
+#  echo 'tried pip freeze'
+#  cat ok
+#  for i in $(<ok);
+#  do
+#    package=$(echo "$i" | awk -F '=' '{print $1}')
+#    if [ "$package" = "csr-aws-ha" ]
+#    then
+#      echo 'package found'
+#      test=1
+#      break
+#    fi
+#  done
+#done
+#
+#ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
+#configure terminal
+#crypto isakmp policy 1
+#encr aes 256
+#authentication pre-share
+#crypto isakmp key cisco address 0.0.0.0
+#end
+#
+#configure terminal
+#crypto ipsec transform-set uni-perf esp-aes 256 esp-sha-hmac
+#mode tunnel
+#end
+#
+#configure terminal
+#crypto ipsec profile vti-1
+#set security-association lifetime kilobytes disable
+#set security-association lifetime seconds 86400
+#set transform-set uni-perf
+#set pfs group2
+#end
+#
+#configure terminal
+#interface Tunnel1
+#ip address ${csrv1_eth1_private} 255.255.255.252.
+#load-interval 30
+#tunnel source GigabitEthernet1
+#tunnel mode ipsec ipv4
+#tunnel destination ${csrv2_public_ip} 
+#tunnel protection ipsec profile vti-1
+#bfd interval 100 min_rx 100 multiplier 3
+#end
+#
+#configure terminal
+#router eigrp 1
+#network 192.168.101.0 0.0.0.255
+#bfd all-interfaces
+#end
+#
+#configure terminal
+#redundancy
+#cloud-ha bfd peer ${csrv2_eth1_private}
+#end
+#
+#guestshell
+#create_node.py -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv1_eth1_eni}
+#EOF
 
 #until ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} 'guestshell enable'; do
 #    sleep 5
