@@ -1,11 +1,14 @@
 cat <<EOF >> csr.pem
 ${ssh_key}
 EOF
+function remote_ssh_command () {
+  ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@$1 "$2"
+}
 chmod 600 csr.pem 
-until ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} 'guestshell enable'; do
-    sleep 5
-done
-ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
+#until ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} 'guestshell enable'; do
+#    sleep 5
+#done
+remote_ssh_command ${csrv1_public_ip} << EOF
 configure terminal 
 interface GigabitEthernet2 
 no shutdown 
