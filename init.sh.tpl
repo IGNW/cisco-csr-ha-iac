@@ -20,18 +20,18 @@ test
 
 function enable_guestshell () {
   ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
-  guestshell enable
+guestshell enable
 EOF
 }
 
 function install_csr_aws_ha () {
   ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
-  guestshell run pip install csr_aws_ha --user
+guestshell run pip install csr_aws_ha --user
 EOF
 }
 function pip_freeze () {
   ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
-  guestshell run pip freeze 
+guestshell run pip freeze 
 EOF
 }
 
