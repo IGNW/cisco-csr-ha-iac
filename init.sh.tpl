@@ -142,5 +142,5 @@ cloud-ha bfd peer ${csrv1_eth1_private}
 end
 
 guestshell
-create_node.py -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv2_eth1_eni}
+guestshell run create_node -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv2_eth1_eni}
 EOF
