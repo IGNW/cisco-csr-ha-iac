@@ -130,6 +130,7 @@ router eigrp 1
 network 192.168.101.0 0.0.0.255
 bfd all-interfaces
 end
+EOF
 
 ### BFD Configure on Router 1 after Router2 goes throgh initial
 ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
