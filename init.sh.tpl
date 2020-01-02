@@ -5,23 +5,23 @@ EOF
 chmod 600 csr.pem 
 until cat csr1 | grep 'RUNNING'; do 
   echo 'Failing until CSRV1 guestshell is enabled. Please wait, could take several minutes'
-  ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' > csr1
+  ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${node1_public_ip} 'guestshell enable' > csr1
 done
 
-ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${node1_public_ip} << EOF
 configure terminal 
 interface GigabitEthernet2 
 no shutdown 
-ip address ${csrv1_eth1_private} 255.255.255.0 
+ip address ${node1_eth1_private} 255.255.255.0 
 end
 EOF
 
-ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
+ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${node1_public_ip} <<-'EOF'
 guestshell run pip install csr_aws_ha --user
 EOF
 
 
-ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${node1_public_ip} << EOF
 configure terminal
 crypto isakmp policy 1
 encr aes 256
@@ -44,44 +44,44 @@ end
 
 configure terminal
 interface Tunnel1
-ip address 192.168.101.1 255.255.255.252
+ip address ${node1_tunnel1_ip_and_mask}
 load-interval 30
 tunnel source GigabitEthernet1
 tunnel mode ipsec ipv4
-tunnel destination ${csrv2_public_ip} 
+tunnel destination ${node2_public_ip} 
 tunnel protection ipsec profile vti-1
 bfd interval 100 min_rx 100 multiplier 3
 end
 
 configure terminal
 router eigrp 1
-network 192.168.101.0 0.0.0.255
+network ${tunnel1_subnet_ip_and_mask}
 bfd all-interfaces
 end
 EOF
 
 until cat csr2 | grep 'RUNNING'; do 
-  echo 'Failing until CSRV2 guestshell is enabled. Please wait, could take several minutes'
-  ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv2_public_ip} 'guestshell enable' > csr2
+  echo 'Failing until CSRV1 guestshell is enabled. Please wait, could take several minutes'
+  ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${node2_public_ip} 'guestshell enable' > csr2
 done
 
-ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${node2_public_ip} << EOF
 configure terminal 
 interface GigabitEthernet2 
 no shutdown 
-ip address ${csrv2_eth1_private} 255.255.255.0 
+ip address ${node2_eth1_private} 255.255.255.0 
 end
 EOF
 
-ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv2_public_ip} <<-'EOF'
+ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${node2_public_ip} <<-'EOF'
 guestshell run pip install csr_aws_ha --user
 EOF
 
-ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${node2_public_ip} << EOF
 configure terminal
 interface GigabitEthernet2
 no shutdown
-ip address ${csrv2_eth1_private} 255.255.255.0
+ip address ${node2_eth1_private} 255.255.255.0
 end
 
 configure terminal
@@ -106,42 +106,42 @@ end
 
 configure terminal
 interface Tunnel1
-ip address 192.168.101.2 255.255.255.252
+ip address ${node2_tunnel1_ip_and_mask}
 load-interval 30
 tunnel source GigabitEthernet1
 tunnel mode ipsec ipv4
-tunnel destination ${csrv1_public_ip} 
+tunnel destination ${node1_public_ip} 
 tunnel protection ipsec profile vti-1
 bfd interval 100 min_rx 100 multiplier 3
 end
 
 configure terminal
 router eigrp 1
-network 192.168.101.0 0.0.0.255
+network ${tunnel1_subnet_ip_and_mask}
 bfd all-interfaces
 end
 EOF
 
 ### BFD Configure on Router 1 after Router2 goes throgh initial
-ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${node1_public_ip} << EOF
 
 configure terminal
 redundancy
-cloud-ha bfd peer ${csrv2_eth1_private}
+cloud-ha bfd peer ${node2_eth1_private}
 end
 EOF
 
-ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${node2_public_ip} << EOF
 configure terminal
 redundancy
-cloud-ha bfd peer ${csrv1_eth1_private}
+cloud-ha bfd peer ${node1_eth1_private}
 end
 EOF
 
-ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
-guestshell run create_node -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv1_eth1_eni}
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${node1_public_ip} << EOF
+guestshell run create_node -i 2 -t ${private_rtb} -rg us-west-2 -n ${node1_eth1_eni}
 EOF
 
-ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
-guestshell run create_node -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv2_eth1_eni}
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${node2_public_ip} << EOF
+guestshell run create_node -i 2 -t ${private_rtb} -rg us-west-2 -n ${node2_eth1_eni}
 EOF
