@@ -36,14 +36,13 @@ function pip_freeze () {
 }
 
 until [ $test ]; do
-  echo 'no csr_aws_ha package found, trying again'
+#echo 'no csr_aws_ha package found, trying again'
   enable_guestshell
   echo "Tried to enable guestshell"
   install_csr_aws_ha
   echo 'tried pip install'
   pip_freeze
   echo 'tried pip freeze'
-  cat ok
   for i in $(<ok);
   do
     package=$(echo "$i" | awk -F '=' '{print $1}')
