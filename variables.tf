@@ -1,3 +1,4 @@
+## Change outside/inside to pub/priv
 variable "availability_zone" {
   default = "us-west-2a"
 }
