@@ -30,7 +30,7 @@ guestshell run pip install csr_aws_ha --user
 EOF
 }
 function pip_freeze () {
-  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
+  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF' >> cat
 guestshell run pip freeze 
 EOF
 }
@@ -44,7 +44,8 @@ do
   echo 'tried pip install'
   pip_freeze > ok
   echo 'tried pip freeze'
-  for i in $(<ok);
+  cat ok
+  for i in $(cat ok);
   echo $i
   do
     package=$(echo "$i" | awk -F '=' '{print $1}')
