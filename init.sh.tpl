@@ -43,7 +43,7 @@ do
   echo "Tried to enable guestshell"
   install_csr_aws_ha
   echo 'tried pip install'
-  pip_freeze > ok
+  ssh -o StrictHostKeyChecking=no -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip freeze' > ok
   echo 'tried pip freeze'
   cat ok | grep csr-aws-ha
   for i in $(cat ok);
