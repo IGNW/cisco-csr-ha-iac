@@ -21,22 +21,23 @@ test
 function enable_guestshell () {
   ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
   guestshell enable
-  EOF
+EOF
 }
 
 function install_csr_aws_ha () {
   ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
   guestshell run pip install csr_aws_ha --user
-  EOF
+EOF
 }
 function pip_freeze () {
   ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
   guestshell run pip freeze 
-  EOF
+EOF
 }
 
-until [ $test ]; do
-#echo 'no csr_aws_ha package found, trying again'
+until [ $test ];
+do
+  echo 'no csr_aws_ha package found, trying again'
   enable_guestshell
   echo "Tried to enable guestshell"
   install_csr_aws_ha
@@ -46,7 +47,7 @@ until [ $test ]; do
   for i in $(<ok);
   do
     package=$(echo "$i" | awk -F '=' '{print $1}')
-    if [ "$package" = "csr-aws-ha" ]
+    if [ "$package" = "csr-aws-ha" ];
     then
       echo 'package found'
       test=1
