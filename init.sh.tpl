@@ -17,32 +17,44 @@ end
 EOF
 }
 test 
-#until [ $test ]; do
-#  echo 'no csr_aws_ha package found, trying again'
-#  ssh -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
-#  guestshell enable
-#  EOF
-#  echo "Tried to enable guestshell"
-#  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
-#  guestshell run pip install csr_aws_ha --user
-#  EOF
-#  echo 'tried pip install'
-#  ssh -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
-#  guestshell run pip freeze 
-#  EOF
-#  echo 'tried pip freeze'
-#  cat ok
-#  for i in $(<ok);
-#  do
-#    package=$(echo "$i" | awk -F '=' '{print $1}')
-#    if [ "$package" = "csr-aws-ha" ]
-#    then
-#      echo 'package found'
-#      test=1
-#      break
-#    fi
-#  done
-#done
+
+function enable_guestshell () {
+  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
+  guestshell enable
+  EOF
+}
+
+function install_csr_aws_ha () {
+  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
+  guestshell run pip install csr_aws_ha --user
+  EOF
+}
+function pip_freeze () {
+  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
+  guestshell run pip freeze 
+  EOF
+}
+
+until [ $test ]; do
+  echo 'no csr_aws_ha package found, trying again'
+  enable_guestshell
+  echo "Tried to enable guestshell"
+  install_csr_aws_ha
+  echo 'tried pip install'
+  pip_freeze
+  echo 'tried pip freeze'
+  cat ok
+  for i in $(<ok);
+  do
+    package=$(echo "$i" | awk -F '=' '{print $1}')
+    if [ "$package" = "csr-aws-ha" ]
+    then
+      echo 'package found'
+      test=1
+      break
+    fi
+  done
+done
 #
 #ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
 #configure terminal
