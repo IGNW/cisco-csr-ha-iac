@@ -7,18 +7,16 @@ ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} 'guestshe
 until ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} 'guestshell enable'; do
     sleep 5
 done
-term_config="$(cat <<-EOF
+function test () {
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
 configure terminal 
 interface GigabitEthernet2 
 no shutdown 
 ip address ${csrv1_eth1_private} 255.255.255.0 
 end
 EOF
-)"
-function test () {
-  ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} $term_config
 }
-test $v
+test 
 #until [ $test ]; do
 #  echo 'no csr_aws_ha package found, trying again'
 #  ssh -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
