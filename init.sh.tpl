@@ -4,8 +4,10 @@ ${ssh_key}
 EOF
 chmod 600 csr.pem 
 ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} 'guestshell disable'
-until ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} 'guestshell enable'; do
-    sleep 5
+
+until cat csr1 | grep 'RUNNING'; do 
+  echo 'It is not running yet'
+  ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' > csr1
 done
 
 ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
@@ -72,8 +74,9 @@ guestshell
 guestshell run create_node -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv1_eth1_eni}
 EOF
 
-until ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} 'guestshell enable'; do
-    sleep 5
+until cat csr2 | grep 'RUNNING'; do 
+  echo 'It is not running yet'
+  ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i ~/Downloads/csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' > csr2
 done
 
 ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
