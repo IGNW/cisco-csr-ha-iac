@@ -63,14 +63,6 @@ router eigrp 1
 network 192.168.101.0 0.0.0.255
 bfd all-interfaces
 end
-### Do same on other
-
-configure terminal
-redundancy
-cloud-ha bfd peer ${csrv2_eth1_private}
-end
-
-guestshell run create_node -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv1_eth1_eni}
 EOF
 
 until cat csr2 | grep 'RUNNING'; do 
@@ -139,18 +131,26 @@ network 192.168.101.0 0.0.0.255
 bfd all-interfaces
 end
 
-## Insert rest of 1
-##
-until cat csr2 | grep 'RUNNING'; do 
-  echo 'It is not running yet'
-  ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} '' > csr2
-done
+### BFD Configure on Router 1 after Router2 goes throgh initial
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
 
-##
+configure terminal
+redundancy
+cloud-ha bfd peer ${csrv2_eth1_private}
+end
+EOF
+
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
 configure terminal
 redundancy
 cloud-ha bfd peer ${csrv1_eth1_private}
 end
+EOF
 
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} << EOF
+guestshell run create_node -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv1_eth1_eni}
+EOF
+
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
 guestshell run create_node -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv2_eth1_eni}
 EOF
