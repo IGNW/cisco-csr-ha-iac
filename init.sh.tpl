@@ -29,8 +29,9 @@ function install_csr_aws_ha () {
 guestshell run pip install csr_aws_ha --user
 EOF
 }
+
 function pip_freeze () {
-  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF' >> cat
+  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF' 
 guestshell run pip freeze 
 EOF
 }
