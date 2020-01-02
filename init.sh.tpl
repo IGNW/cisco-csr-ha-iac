@@ -1,7 +1,9 @@
+#!/bin/bash
 cat <<EOF >> csr.pem
 ${ssh_key}
 EOF
 chmod 600 csr.pem 
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} 'guestshell disable'
 until ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} 'guestshell enable'; do
     sleep 5
 done
@@ -12,6 +14,16 @@ no shutdown
 ip address ${csrv1_eth1_private} 255.255.255.0 
 end
 EOF
+v="$(cat <<-EOF
+    A
+        B
+    C
+EOF
+)"
+function test () {
+  echo $1
+}
+test $v
 until [ $test ]; do
   echo 'no csr_aws_ha package found, trying again'
   ssh -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
@@ -22,7 +34,7 @@ until [ $test ]; do
   guestshell run pip install csr_aws_ha --user
   EOF
   echo 'tried pip install'
-  ssh -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF' > ok
+  ssh -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
   guestshell run pip freeze 
   EOF
   echo 'tried pip freeze'
