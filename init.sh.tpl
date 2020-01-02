@@ -49,7 +49,7 @@ end
 
 configure terminal
 interface Tunnel1
-ip address ${csrv1_eth1_private} 255.255.255.0
+ip address 192.168.101.1 255.255.255.252
 load-interval 30
 tunnel source GigabitEthernet1
 tunnel mode ipsec ipv4
@@ -116,7 +116,7 @@ end
 
 configure terminal
 interface Tunnel1
-ip address ${csrv2_eth1_private} 255.255.255.0
+ip address 192.168.101.2 255.255.255.252
 load-interval 30
 tunnel source GigabitEthernet1
 tunnel mode ipsec ipv4
