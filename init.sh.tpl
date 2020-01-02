@@ -30,7 +30,7 @@ guestshell run pip install csr_aws_ha --user
 EOF
 }
 function pip_freeze () {
-  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
+  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF' > ok
 guestshell run pip freeze 
 EOF
 }
@@ -42,7 +42,7 @@ do
   echo "Tried to enable guestshell"
   install_csr_aws_ha
   echo 'tried pip install'
-  pip_freeze
+  pip_freeze 
   echo 'tried pip freeze'
   for i in $(<ok);
   do
