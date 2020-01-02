@@ -45,9 +45,8 @@ do
   echo 'tried pip install'
   pip_freeze > ok
   echo 'tried pip freeze'
-  cat ok
+  cat ok | grep csr-aws-ha
   for i in $(cat ok);
-  echo "$i"
   do
     package=$(echo "$i" | awk -F '=' '{print $1}')
     if [ "$package" = "csr-aws-ha" ];
