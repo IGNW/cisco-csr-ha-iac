@@ -18,9 +18,10 @@ ip address ${csrv1_eth1_private} 255.255.255.0
 end
 EOF
 
-ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
-guestshell enable
-EOF
+until cat csr1 | grep 'RUNNING'; do 
+  echo 'It is not running yet'
+  ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' > csr1
+done
 
 ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
 guestshell run pip install csr_aws_ha --user
@@ -70,7 +71,6 @@ redundancy
 cloud-ha bfd peer ${csrv2_eth1_private}
 end
 
-guestshell
 guestshell run create_node -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv1_eth1_eni}
 EOF
 
@@ -87,9 +87,10 @@ ip address ${csrv2_eth1_private} 255.255.255.0
 end
 EOF
 
-ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv2_public_ip} <<-'EOF'
-guestshell enable
-EOF
+until cat csr2 | grep 'RUNNING'; do 
+  echo 'It is not running yet'
+  ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' > csr2
+done
 
 ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv2_public_ip} <<-'EOF'
 guestshell run pip install csr_aws_ha --user
@@ -144,6 +145,5 @@ redundancy
 cloud-ha bfd peer ${csrv1_eth1_private}
 end
 
-guestshell
 guestshell run create_node -i 2 -t ${private_rtb} -rg us-west-2 -n ${csrv2_eth1_eni}
 EOF
