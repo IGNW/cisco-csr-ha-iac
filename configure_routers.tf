@@ -2,7 +2,7 @@ resource "null_resource" "iface1" {
   # Changes to any instance of interfaces
   triggers = {
     #vars     = jsonencode(local.template_vars)
-    vars     = "asd"
+    vars     = "as"
   }
 
   provisioner "local-exec" {
