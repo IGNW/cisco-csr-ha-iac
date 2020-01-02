@@ -3,8 +3,6 @@ cat <<EOF >> csr.pem
 ${ssh_key}
 EOF
 chmod 600 csr.pem 
-ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv1_public_ip} 'guestshell disable'
-
 until cat csr1 | grep 'RUNNING'; do 
   echo 'It is not running yet'
   ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' > csr1
@@ -51,7 +49,7 @@ end
 
 configure terminal
 interface Tunnel1
-ip address ${csrv1_eth1_private} 255.255.255.252
+ip address ${csrv1_eth1_private} 255.255.255.0
 load-interval 30
 tunnel source GigabitEthernet1
 tunnel mode ipsec ipv4
@@ -65,6 +63,7 @@ router eigrp 1
 network 192.168.101.0 0.0.0.255
 bfd all-interfaces
 end
+### Do same on other
 
 configure terminal
 redundancy
@@ -125,7 +124,7 @@ end
 
 configure terminal
 interface Tunnel1
-ip address ${csrv2_eth1_private} 255.255.255.252
+ip address ${csrv2_eth1_private} 255.255.255.0
 load-interval 30
 tunnel source GigabitEthernet1
 tunnel mode ipsec ipv4
@@ -140,6 +139,14 @@ network 192.168.101.0 0.0.0.255
 bfd all-interfaces
 end
 
+## Insert rest of 1
+##
+until cat csr2 | grep 'RUNNING'; do 
+  echo 'It is not running yet'
+  ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} '' > csr2
+done
+
+##
 configure terminal
 redundancy
 cloud-ha bfd peer ${csrv1_eth1_private}
