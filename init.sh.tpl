@@ -14,11 +14,17 @@ end
 EOF
 until [ $test ]; do
   echo 'no csr_aws_ha package found, trying again'
-  ssh -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' &&
+  ssh -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
+  guestshell enable
+  EOF
   echo "Tried to enable guestshell"
-  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip install csr_aws_ha --user'
+  ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
+  guestshell run pip install csr_aws_ha --user
+  EOF
   echo 'tried pip install'
-  ssh -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell run pip freeze' > ok
+  ssh -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF' > ok
+  guestshell run pip freeze 
+  EOF
   echo 'tried pip freeze'
   cat ok
   for i in $(<ok);
