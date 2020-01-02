@@ -67,7 +67,7 @@ EOF
 
 until cat csr2 | grep 'RUNNING'; do 
   echo 'It is not running yet'
-  ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' > csr2
+  ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv2_public_ip} 'guestshell enable' > csr2
 done
 
 ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${csrv2_public_ip} << EOF
@@ -80,7 +80,7 @@ EOF
 
 until cat csr2 | grep 'RUNNING'; do 
   echo 'It is not running yet'
-  ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' > csr2
+  ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv2_public_ip} 'guestshell enable' > csr2
 done
 
 ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv2_public_ip} <<-'EOF'
