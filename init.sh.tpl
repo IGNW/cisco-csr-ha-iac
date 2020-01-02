@@ -4,7 +4,7 @@ ${ssh_key}
 EOF
 chmod 600 csr.pem 
 until cat csr1 | grep 'RUNNING'; do 
-  echo 'It is not running yet'
+  echo 'Failing until CSRV1 guestshell is enabled. Please wait, could take several minutes'
   ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' > csr1
 done
 
@@ -15,11 +15,6 @@ no shutdown
 ip address ${csrv1_eth1_private} 255.255.255.0 
 end
 EOF
-
-until cat csr1 | grep 'RUNNING'; do 
-  echo 'It is not running yet'
-  ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} 'guestshell enable' > csr1
-done
 
 ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv1_public_ip} <<-'EOF'
 guestshell run pip install csr_aws_ha --user
@@ -66,7 +61,7 @@ end
 EOF
 
 until cat csr2 | grep 'RUNNING'; do 
-  echo 'It is not running yet'
+  echo 'Failing until CSRV2 guestshell is enabled. Please wait, could take several minutes'
   ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv2_public_ip} 'guestshell enable' > csr2
 done
 
@@ -77,11 +72,6 @@ no shutdown
 ip address ${csrv2_eth1_private} 255.255.255.0 
 end
 EOF
-
-until cat csr2 | grep 'RUNNING'; do 
-  echo 'It is not running yet'
-  ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv2_public_ip} 'guestshell enable' > csr2
-done
 
 ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${csrv2_public_ip} <<-'EOF'
 guestshell run pip install csr_aws_ha --user
