@@ -47,7 +47,7 @@ do
   echo 'tried pip freeze'
   cat ok
   for i in $(cat ok);
-  echo $i
+  echo "$i"
   do
     package=$(echo "$i" | awk -F '=' '{print $1}')
     if [ "$package" = "csr-aws-ha" ];
