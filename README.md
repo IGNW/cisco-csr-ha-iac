@@ -8,7 +8,7 @@ Terraform module which creates two redundant CSRvs
 module CSRV_HA {
   source                                    = "github.com/IGNW/cisco-csr-ha-iac"
   base64encoded_private_ssh_key             = "${var.base64encoded_private_ssh_key}"
-  base64encoded_public_ssh_key             = "${var.base64encoded_public_ssh_key}"
+  base64encoded_public_ssh_key              = "${var.base64encoded_public_ssh_key}"
   availability_zone                         = "us-west-2a"
   node1_tunnel1_ip_and_mask                 = "192.168.101.1 255.255.255.252"
   node2_tunnel1_ip_and_mask                 = "192.168.101.2 255.255.255.252"
