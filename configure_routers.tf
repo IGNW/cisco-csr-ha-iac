@@ -23,7 +23,7 @@ locals {
     private_rtb                = "${aws_route_table.private.id}"
     node1_eth1_eni             = "${aws_network_interface.csr1000v1eth1.id}"
     node2_eth1_eni             = "${aws_network_interface.csr1000v2eth1.id}"
-    ssh_key                    = "${base64decode(var.base64encoded_ssh_key)}"
+    ssh_key                    = "${base64decode(var.base64encoded_ssh_private_key)}"
   }
 }
 

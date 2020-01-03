@@ -1,5 +1,4 @@
-scratch.tf
-terraform.tfstate
-terraform.tfstate.backup
 .terraform
-scratch.json
+terraform.tfstate
+*.tfstate*
+terraform.tfvars

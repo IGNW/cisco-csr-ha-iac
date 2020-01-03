@@ -1,14 +1,6 @@
-# AWS EC2 CSR HA Terraform Module
-
-Terraform module which creates two redundant CSRvs
-
-## Usage
-
-```hcl
 module CSRV_HA {
   source                                    = "github.com/IGNW/cisco-csr-ha-iac"
-  base64encoded_private_ssh_key             = "${var.base64encoded_private_ssh_key}"
-  base64encoded_public_ssh_key             = "${var.base64encoded_public_ssh_key}"
+  base64encoded_ssh_key                     = "${var.base64encoded_ssh_key}"
   availability_zone                         = "us-west-2a"
   node1_tunnel1_ip_and_mask                 = "192.168.101.1 255.255.255.252"
   node2_tunnel1_ip_and_mask                 = "192.168.101.2 255.255.255.252"
@@ -25,17 +17,5 @@ module CSRV_HA {
   public_security_group_egress_rules        = ["all-all"]
   ssh_ingress_cidr_block                    = ["0.0.0.0/0"]
   public_security_group_ingress_rules       = ["https-443-tcp", "http-80-tcp", "all-icmp"]
-  instance_type                             = "c4.large"
+  instance_type                             = "t2.nano"
 }
-```
-
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-
-## Authors
-
-Module managed by [IGNW](https://github.com/ignw).
-
-## License
-
-Apache 2 Licensed. See LICENSE for full details.
