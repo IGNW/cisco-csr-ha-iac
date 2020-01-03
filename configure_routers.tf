@@ -1,7 +1,7 @@
 resource "null_resource" "config_script" {
   # Changes to any instance of interfaces
   triggers = {
-    vars     = jsonencode(local.template_vars)
+    vars     = "${jsonencode(local.template_vars)}"
     template = "${data.template_file.ha_configure_script.rendered}"
   }
 
@@ -13,7 +13,7 @@ resource "null_resource" "config_script" {
 
 locals {
   template_vars = {
-    node1_public_ip            = join("", "${module.instance1.public_ip}")
+    node1_public_ip            = "${join("", "${module.instance1.public_ip}")}"
     node2_public_ip            = join("", "${module.instance2.public_ip}")
     node1_tunnel1_ip_and_mask  = "${var.node1_tunnel1_ip_and_mask}"
     node2_tunnel1_ip_and_mask  = "${var.node2_tunnel1_ip_and_mask}"

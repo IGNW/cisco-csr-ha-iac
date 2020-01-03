@@ -28,9 +28,57 @@ module CSRV_HA {
   instance_type                             = "c4.large"
 }
 ```
+## Required Inputs
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+The following input variables are required:
+
+### base64encoded\_ssh\_private\_key
+
+Description: base64 encoded private key to use for terraform to connect to the router
+
+Type: `string`
+
+### base64encoded\_ssh\_public\_key
+
+Description: base64 encoded public key to use for terraform to connect to the router
+
+Type: `string`
+
+## Optional Inputs
+
+The following input variables are optional (have default values):
+
+### availability\_zone
+
+Description: The AWS zone to setup your CSR1000V Highly Available Routers
+
+Type: `string`
+
+Default: `"us-west-2a"`
+
+### instance\_type
+
+Description: Machine size of the routers
+
+Type: `string`
+
+Default: `"c4.large"`
+
+### node1\_eth1\_private\_ip
+
+Description: Private ip address of the internal network interface on Node1
+
+Type: `string`
+
+Default: `"10.16.3.252"`
+
+### node1\_private\_subnet\_cidr\_block
+
+Description: Private ip cidr\_block for the node1 subnet
+
+Type: `string`
+
+
 
 ## Authors
 
