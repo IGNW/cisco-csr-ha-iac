@@ -110,3 +110,9 @@ variable "instance_type" {
   description = "Machine size of the routers"
   default     = "c4.large"
 }
+
+variable "aws_region" {
+  description = "Region for aws"
+  default     = "us-west-2"
+}
+
