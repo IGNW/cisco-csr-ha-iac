@@ -80,6 +80,9 @@ Type: `string`
 
 
 
+## Extra
+To see the relationship map open graph.svg in a browser
+
 ## Authors
 
 Module managed by [IGNW](https://github.com/ignw).
