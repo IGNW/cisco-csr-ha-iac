@@ -1,6 +1,7 @@
 # AWS EC2 CSR HA Terraform Module
 
-Terraform module which creates two redundant CSRvs
+Terraform module which creates an HA Pair of two CSR 1000V soft switches in AWS.
+<br>[AWS CSR 1000V Marketplace Document](https://aws.amazon.com/marketplace/pp/B00OCG4Q4E)
 
 ## Usage
 
