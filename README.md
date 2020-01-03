@@ -28,57 +28,30 @@ module CSRV_HA {
   instance_type                             = "c4.large"
 }
 ```
-## Required Inputs
 
-The following input variables are required:
+## Inputs
 
-### base64encoded\_ssh\_private\_key
-
-Description: base64 encoded private key to use for terraform to connect to the router
-
-Type: `string`
-
-### base64encoded\_ssh\_public\_key
-
-Description: base64 encoded public key to use for terraform to connect to the router
-
-Type: `string`
-
-## Optional Inputs
-
-The following input variables are optional (have default values):
-
-### availability\_zone
-
-Description: The AWS zone to setup your CSR1000V Highly Available Routers
-
-Type: `string`
-
-Default: `"us-west-2a"`
-
-### instance\_type
-
-Description: Machine size of the routers
-
-Type: `string`
-
-Default: `"c4.large"`
-
-### node1\_eth1\_private\_ip
-
-Description: Private ip address of the internal network interface on Node1
-
-Type: `string`
-
-Default: `"10.16.3.252"`
-
-### node1\_private\_subnet\_cidr\_block
-
-Description: Private ip cidr\_block for the node1 subnet
-
-Type: `string`
-
-
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| availability\_zone | The AWS zone to setup your CSR1000V Highly Available Routers | string | `"us-west-2a"` | no |
+| base64encoded\_ssh\_private\_key | base64 encoded private key to use for terraform to connect to the router | string | n/a | yes |
+| base64encoded\_ssh\_public\_key | base64 encoded public key to use for terraform to connect to the router | string | n/a | yes |
+| instance\_type | Machine size of the routers | string | `"c4.large"` | no |
+| node1\_eth1\_private\_ip | Private ip address of the internal network interface on Node1 | string | `"10.16.3.252"` | no |
+| node1\_private\_subnet\_cidr\_block | Private ip cidr\_block for the node1 subnet | string | `"10.16.3.0/24"` | no |
+| node1\_public\_subnet\_cidr\_block | Public ip cidr\_block for the node1 subnet | string | `"10.16.1.0/24"` | no |
+| node1\_tunnel1\_ip\_and\_mask | The address of the tunnel for CSRV number 1 | string | `"192.168.101.1 255.255.255.252"` | no |
+| node2\_eth1\_private\_ip | Private ip address of the internal network interface on Node2 | string | `"10.16.4.253"` | no |
+| node2\_private\_subnet\_cidr\_block | Private ip cidr\_block for the node2 subnet | string | `"10.16.4.0/24"` | no |
+| node2\_public\_subnet\_cidr\_block | Public ip cidr\_block for the node2 subnet | string | `"10.16.2.0/24"` | no |
+| node2\_tunnel1\_ip\_and\_mask | The address of the tunnel for CSRV number 2 | string | `"192.168.101.2 255.255.255.252"` | no |
+| private\_vpc\_cidr\_block | Cidr block for the entire vpc | string | `"10.16.0.0/16"` | no |
+| public\_route\_table\_allowed\_cidr | Allowed cidr\_block for connections from the public network interface route table | string | `"0.0.0.0/0"` | no |
+| public\_security\_group\_egress\_rules | Allowed cidr\_block for connections from the public | list(string) | `<list>` | no |
+| public\_security\_group\_ingress\_cidr\_blocks | Allowed cidr\_block for connections to the public network | list(string) | `<list>` | no |
+| public\_security\_group\_ingress\_rules | Rules allowed to public network | list(string) | `<list>` | no |
+| ssh\_ingress\_cidr\_block | Address block from which ssh is allowed | list(string) | `<list>` | no |
+| tunnel1\_subnet\_ip\_and\_mask | The address of the tunnel and the subnet mask | string | `"192.168.101.0 0.0.0.255"` | no |
 
 ## Extra
 To see the relationship map open graph.svg in a browser
