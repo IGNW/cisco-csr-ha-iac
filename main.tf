@@ -17,5 +17,5 @@ module CSRV_HA {
   public_security_group_egress_rules        = ["all-all"]
   ssh_ingress_cidr_block                    = ["0.0.0.0/0"]
   public_security_group_ingress_rules       = ["https-443-tcp", "http-80-tcp", "all-icmp"]
-  instance_type                             = "t2.nano"
+  instance_type                             = "c4.large"
 }
