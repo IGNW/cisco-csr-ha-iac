@@ -1,1 +1,1 @@
-  variable "base64encoded_ssh_key" {}
+variable "base64encoded_private_ssh_key" {}
