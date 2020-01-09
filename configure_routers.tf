@@ -14,7 +14,7 @@ resource "null_resource" "config_script" {
 locals {
   template_vars = {
     node1_public_ip            = "${join("", "${module.instance1.public_ip}")}"
-    node2_public_ip            = join("", "${module.instance2.public_ip}")
+    node2_public_ip            = "${join("", "${module.instance2.public_ip}")}"
     node1_tunnel1_ip_and_mask  = "${var.node1_tunnel1_ip_and_mask}"
     node2_tunnel1_ip_and_mask  = "${var.node2_tunnel1_ip_and_mask}"
     tunnel1_subnet_ip_and_mask = "${var.tunnel1_subnet_ip_and_mask}"
@@ -23,7 +23,7 @@ locals {
     private_rtb                = "${aws_route_table.private.id}"
     node1_eth1_eni             = "${aws_network_interface.csr1000v1eth1.id}"
     node2_eth1_eni             = "${aws_network_interface.csr1000v2eth1.id}"
-    ssh_key                    = "${base64decode(var.base64encoded_ssh_private_key)}"
+    ssh_key                    = "${base64decode(var.base64encoded_private_ssh_key)}"
   }
 }
 

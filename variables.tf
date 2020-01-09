@@ -23,13 +23,13 @@ variable "tunnel1_subnet_ip_and_mask" {
   type        = string
 }
 
-variable "base64encoded_ssh_private_key" {
+variable "base64encoded_private_ssh_key" {
   description = "base64 encoded private key to use for terraform to connect to the router"
   default     = null
   type        = string
 }
 
-variable "base64encoded_ssh_public_key" {
+variable "base64encoded_public_ssh_key" {
   description = "base64 encoded public key to use for terraform to connect to the router"
   default     = null
   type        = string
