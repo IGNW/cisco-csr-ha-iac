@@ -1,5 +1,6 @@
 module instance1 {
-  source                      = "terraform-aws-modules/ec2-instance/aws"
+  #source                      = "terraform-aws-modules/ec2-instance/aws"
+  source                      = "github.com/terraform-aws-modules/ec2-instance"
   version                     = "~> 2.0"
   ami                         = "${data.aws_ami.csr1000v.id}"
   instance_type               = "c4.large"
@@ -12,7 +13,8 @@ module instance1 {
 }
 
 module instance2 {
-  source                      = "terraform-aws-modules/ec2-instance/aws"
+  #source                      = "terraform-aws-modules/ec2-instance/aws"
+  source                      = "github.com/terraform-aws-modules/ec2-instance"
   version                     = "~> 2.0"
   associate_public_ip_address = true
   ami                         = "${data.aws_ami.csr1000v.id}"
