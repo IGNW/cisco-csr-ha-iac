@@ -1,6 +1,5 @@
 module "security_group_outside" {
-  source  = "terraform-aws-modules/security-group/aws"
-  version = "~> 3.0"
+  source  = "./modules/terraform-aws-security-group"
 
   name        = "csroutside"
   description = "Security group for public interface of csr1000v"
@@ -12,16 +11,14 @@ module "security_group_outside" {
 }
 
 module "ssh_security_group" {
-  source              = "terraform-aws-modules/security-group/aws//modules/ssh"
-  version             = "~> 3.0"
+  source              = "./modules/terraform-aws-security-group/modules/ssh"
   name                = "csrssh"
   vpc_id              = "${aws_vpc.private.id}"
   ingress_cidr_blocks = "${var.ssh_ingress_cidr_block}"
 }
 
 module "security_group_inside" {
-  source              = "terraform-aws-modules/security-group/aws"
-  version             = "~> 3.0"
+  source              = "./modules/terraform-aws-security-group"
   name                = "csrinside"
   description         = "Security group for private interface of csr1000v"
   vpc_id              = "${aws_vpc.private.id}"
@@ -31,8 +28,7 @@ module "security_group_inside" {
 }
 
 module "security_group_failover" {
-  source  = "terraform-aws-modules/security-group/aws"
-  version = "~> 3.0"
+  source  = "./modules/terraform-aws-security-group"
 
   name        = "csrfailover"
   description = "Security group for private interface of csr1000v"
