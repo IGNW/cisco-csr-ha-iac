@@ -5,5 +5,5 @@ output "node2_public_ip_address" {
   value = "${module.instance2.public_ip}"
 }
 output "csr1000v_instance_profile" {
-  value = "${aws_iam_instance_profile.csr1000v.name}"
+  value = "${aws_iam_instance_profile.csr1000v[1].name}"
 }

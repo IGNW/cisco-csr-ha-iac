@@ -6,7 +6,8 @@ module instance1 {
   subnet_id                   = "${aws_subnet.public1.id}"
   name                        = "csr1000v1"
   key_name                    = "csr"
-  iam_instance_profile        = "${aws_iam_instance_profile.csr1000v.name}"
+  #iam_instance_profile        = "${aws_iam_instance_profile.csr1000v.name}"
+  iam_instance_profile        = "${ var.csr1000v_instance_profile != "" ? var.csr1000v_instance_profile : aws_iam_instance_profile.csr1000v[1].name }"
   associate_public_ip_address = true
   vpc_security_group_ids      = ["${module.security_group_outside.this_security_group_id}", "${module.ssh_security_group.this_security_group_id}"]
 }
@@ -19,7 +20,7 @@ module instance2 {
   name                        = "csr1000v2"
   key_name                    = "csr"
   instance_type               = "c4.large"
-  iam_instance_profile        = "${aws_iam_instance_profile.csr1000v.name}"
+  iam_instance_profile        = "${ var.csr1000v_instance_profile != "" ? var.csr1000v_instance_profile : aws_iam_instance_profile.csr1000v[1].name }"
   subnet_id                   = aws_subnet.public2.id
   vpc_security_group_ids      = ["${module.security_group_outside.this_security_group_id}", "${module.ssh_security_group.this_security_group_id}"]
 }

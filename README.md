@@ -39,6 +39,7 @@ module CSRV_HA {
 | base64encoded\_ssh\_private\_key | base64 encoded private key to use for terraform to connect to the router | string | n/a | yes |
 | base64encoded\_ssh\_public\_key | base64 encoded public key to use for terraform to connect to the router | string | n/a | yes |
 | csr1000v\_ami\_filter | Filter to find best match of image | string | `"cisco-CSR-.16.12.01a-AX-HVM-9f5a4516-a4c3-4cf1-89d4-105d2200230e-ami-0f6fdba70c4443b5f.4"` | no |
+| csr1000v\_instance\_profile | Only for using existing instance profiles to pass to the csr1000v ha module, or when using multiple instances of this module | string | n/a | no |
 | instance\_type | Machine size of the routers | string | `"c4.large"` | no |
 | node1\_eth1\_private\_ip | Private ip address of the internal network interface on Node1 | string | `"10.16.3.252"` | no |
 | node1\_private\_subnet\_cidr\_block | Private ip cidr\_block for the node1 subnet | string | `"10.16.3.0/24"` | no |

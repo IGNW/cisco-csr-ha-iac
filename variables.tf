@@ -123,7 +123,7 @@ variable "aws_region" {
   default     = "us-west-2"
 }
 
-#variable "csr1000v_instance_profile" {
-#  value = "${aws_iam_instance_profile.csr1000v.name}"
-#  description = "Only for using existing instance profiles to pass to the csr1000v ha module, or when using multiple instances of this module"
-#}
+variable "csr1000v_instance_profile" {
+  default = null
+  description = "Only for using existing instance profiles to pass to the csr1000v ha module, or when using multiple instances of this module"
+}
