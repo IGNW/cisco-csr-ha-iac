@@ -4,7 +4,6 @@ variable "availability_zone" {
   default     = "us-west-2a"
   type        = string
 }
-
     
 variable "csr1000v_ami_filter" {
   description = "The filter used to search for the correct ami to use"

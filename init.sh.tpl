@@ -18,7 +18,7 @@ ip address ${node1_eth1_private} 255.255.255.0
 end
 EOF
 
-ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${node1_public_ip} <<-'EOF'
+ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${node1_public_ip} << EOF
 guestshell run pip install csr_aws_ha --user
 EOF
 
@@ -77,7 +77,7 @@ ip address ${node2_eth1_private} 255.255.255.0
 end
 EOF
 
-ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${node2_public_ip} <<-'EOF'
+ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${node2_public_ip} << EOF
 guestshell run pip install csr_aws_ha --user
 EOF
 
