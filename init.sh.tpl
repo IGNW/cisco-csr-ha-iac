@@ -16,7 +16,9 @@ interface GigabitEthernet2
 no shutdown 
 ip address ${node1_eth1_private} 255.255.255.0 
 end
-guestshell run pip install csr_aws_ha --user
+guestshell 
+pip install csr_aws_ha --user
+exit
 EOF
 
 
@@ -76,7 +78,9 @@ end
 EOF
 
 ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${node2_public_ip} << EOF
-guestshell run pip install csr_aws_ha --user
+guestshell 
+pip install csr_aws_ha --user
+exit
 EOF
 
 ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${node2_public_ip} << EOF
