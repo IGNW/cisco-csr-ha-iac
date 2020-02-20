@@ -1,7 +1,7 @@
 resource "aws_iam_instance_profile" "csr1000v" {
   count = "${var.csr1000v_instance_profile != "" ? 1 : 0}"
   name  = "csr1000v"
-  role  = "${aws_iam_role.csr_role[1].name}"
+  role  = "${aws_iam_role.csr_role[0].name}"
 }
 
 resource "aws_iam_policy" "csrpolicy" {
@@ -45,8 +45,8 @@ EOF
 
 resource "aws_iam_role_policy_attachment" "csr-attach" {
   count      = "${var.csr1000v_instance_profile != "" ? 1 : 0}"
-  role       = "${aws_iam_role.csr_role[1].name}"
-  policy_arn = "${aws_iam_policy.csrpolicy[1].arn}"
+  role       = "${aws_iam_role.csr_role[0].name}"
+  policy_arn = "${aws_iam_policy.csrpolicy[0].arn}"
 }
 
 
@@ -54,7 +54,7 @@ resource "aws_iam_role" "csr_role" {
   count                = "${var.csr1000v_instance_profile != "" ? 1 : 0}"
   name                 = "csr1000v"
   path                 = "/"
-  permissions_boundary = "${aws_iam_policy.csrpolicy[1].arn}"
+  permissions_boundary = "${aws_iam_policy.csrpolicy[0].arn}"
 
   assume_role_policy = <<EOF
 {
