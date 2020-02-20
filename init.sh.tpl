@@ -5,7 +5,7 @@ EOF
 chmod 600 csr.pem 
 rm csr1_status_file
 until cat csr1_status_file | grep 'RUNNING'; do 
-  echo 'Failing until CSRV1 guestshell is enabled. Please wait, could take several minutes'
+  echo 'Attempting to enable guestshell in CSRV1. Please wait, could take several minutes'
   ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${node1_public_ip} 'guestshell enable' > csr1_status_file
 done
 rm csr1_status_file
@@ -62,10 +62,12 @@ bfd all-interfaces
 end
 EOF
 
-until cat csr2 | grep 'RUNNING'; do 
-  echo 'Failing until CSRV1 guestshell is enabled. Please wait, could take several minutes'
-  ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${node2_public_ip} 'guestshell enable' > csr2
+rm csr2_status_file
+until cat csr2_status_file | grep 'RUNNING'; do 
+  echo 'Attempting to enable guestshell in CSRV2. Please wait, could take several minutes'
+  ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${node2_public_ip} 'guestshell enable' > csr2_status_file
 done
+rm csr2_status_file
 
 ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${node2_public_ip} << EOF
 configure terminal 
