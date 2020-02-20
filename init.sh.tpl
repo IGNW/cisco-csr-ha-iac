@@ -18,11 +18,7 @@ ip address ${node1_eth1_private} 255.255.255.0
 end
 EOF
 
-ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${node1_public_ip} << EOF
-
-guestshell run pip install csr_aws_ha --user \n
-
-EOF
+ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${node1_public_ip} guestshell run pip install csr_aws_ha --user
 
 
 ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${node1_public_ip} << EOF
@@ -81,11 +77,7 @@ end
 
 EOF
 
-ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${node2_public_ip} << EOF
-
-guestshell run pip install csr_aws_ha --user
-
-EOF
+ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${node2_public_ip} guestshell run pip install csr_aws_ha --user
 
 ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${node2_public_ip} << EOF
 configure terminal
@@ -148,14 +140,6 @@ cloud-ha bfd peer ${node1_eth1_private}
 end
 EOF
 
-ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${node1_public_ip} << EOF
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${node1_public_ip} guestshell run create_node -i 2 -t ${private_rtb} -rg us-west-2 -n ${node1_eth1_eni}
 
-guestshell run create_node -i 2 -t ${private_rtb} -rg us-west-2 -n ${node1_eth1_eni}
-
-EOF
-
-ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${node2_public_ip} << EOF
-
-guestshell run create_node -i 2 -t ${private_rtb} -rg us-west-2 -n ${node2_eth1_eni} \n
-
-EOF
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${node2_public_ip} guestshell run create_node -i 2 -t ${private_rtb} -rg us-west-2 -n ${node2_eth1_eni} \n
