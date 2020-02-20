@@ -5,6 +5,14 @@ variable "availability_zone" {
   type        = string
 }
 
+    
+variable "csr1000v_ami_filter" {
+  description = "The filter used to search for the correct ami to use"
+  default     = "cisco-CSR-.16.12.01a-AX-HVM-9f5a4516-a4c3-4cf1-89d4-105d2200230e-ami-0f6fdba70c4443b5f.4"
+  type        = string
+}
+
+
 variable "node1_tunnel1_ip_and_mask" {
   description = "The address of the tunnel for CSRV number 1"
   default     = "192.168.101.1 255.255.255.252"

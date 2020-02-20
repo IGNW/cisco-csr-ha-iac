@@ -29,7 +29,7 @@ data "aws_ami" "csr1000v" {
 
   filter {
     name   = "name"
-    values = ["cisco-CSR-.16.12.01a-AX-HVM-9f5a4516-a4c3-4cf1-89d4-105d2200230e-ami-0f6fdba70c4443b5f.4"]
+    values = ["${var.csr1000v_ami_filter}"]
   }
 
   filter {
@@ -40,4 +40,3 @@ data "aws_ami" "csr1000v" {
   owners = ["679593333241"] # Cisco
 
 }
-
