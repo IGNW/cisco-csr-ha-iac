@@ -4,7 +4,7 @@ variable "availability_zone" {
   default     = "us-west-2a"
   type        = string
 }
-    
+
 variable "csr1000v_ami_filter" {
   description = "The filter used to search for the correct ami to use"
   default     = "cisco-CSR-.16.12.01a-AX-HVM-9f5a4516-a4c3-4cf1-89d4-105d2200230e-ami-0f6fdba70c4443b5f.4"
@@ -123,3 +123,7 @@ variable "aws_region" {
   default     = "us-west-2"
 }
 
+variable "csr1000v_instance_profile" {
+  value = "${aws_iam_instance_profile.csr1000v.name}"
+  description = "Only for using existing instance profiles to pass to the csr1000v ha module, or when using multiple instances of this module"
+}

@@ -16,11 +16,9 @@ interface GigabitEthernet2
 no shutdown 
 ip address ${node1_eth1_private} 255.255.255.0 
 end
-EOF
-
-ssh -o StrictHostKeyChecking=no -i csr.pem ec2-user@${node1_public_ip} << EOF
 guestshell run pip install csr_aws_ha --user
 EOF
+
 
 
 ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${node1_public_ip} << EOF
@@ -140,9 +138,7 @@ configure terminal
 redundancy
 cloud-ha bfd peer ${node1_eth1_private}
 end
-EOF
 
-ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${node1_public_ip} << EOF
 guestshell run create_node -i 2 -t ${private_rtb} -rg us-west-2 -n ${node1_eth1_eni}
 EOF
 

@@ -68,4 +68,3 @@ resource "aws_iam_role" "csr_role" {
 }
 EOF
 }
-
