@@ -3,10 +3,12 @@ cat <<EOF >> csr.pem
 ${ssh_key}
 EOF
 chmod 600 csr.pem 
-until cat csr1 | grep 'RUNNING'; do 
+rm csr1_status_file
+until cat csr1_status_file | grep 'RUNNING'; do 
   echo 'Failing until CSRV1 guestshell is enabled. Please wait, could take several minutes'
-  ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${node1_public_ip} 'guestshell enable' > csr1
+  ssh -o ServerAliveInterval=3 -o StrictHostKeyChecking=no -i csr.pem ec2-user@${node1_public_ip} 'guestshell enable' > csr1_status_file
 done
+rm csr1_status_file
 
 ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${node1_public_ip} << EOF
 configure terminal 
