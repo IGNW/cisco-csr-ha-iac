@@ -40,7 +40,9 @@ resource "null_resource" "config_script_pip_install" {
   }
 
   provisioner "remote-exec" {
-    command = "guestshell run pip install csr-aws-ha"
+    inline = [
+      "guestshell run pip install csr-aws-ha",
+    ]
   }
 
   connection {
