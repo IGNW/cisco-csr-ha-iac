@@ -20,8 +20,10 @@ EOF
 
 ssh -i csr.pem -o ServerAliveCountMax=10 -o ServerAliveInterval=120 -o LogLevel=DEBUG3 -o StrictHostKeyChecking=no ec2-user@${node1_public_ip} << EOF
 guestshell run bash
+
 pip install csr-aws-ha
 exit
+EOF
 
 ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${node1_public_ip} << EOF
 configure terminal
