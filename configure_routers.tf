@@ -49,7 +49,7 @@ resource "null_resource" "config_script_pip_install" {
     type        = "ssh"
     user        = "ec2-user"
     host        = "${local.template_vars.node1_public_ip}"
-    private_key = "${file("${path.module}/csr.pem")}"
+    private_key = "${base64decode(var.base64encoded_private_ssh_key)}"
   }
 
   depends_on = ["null_resource.config_script"]
