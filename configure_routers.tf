@@ -31,20 +31,3 @@ data "template_file" "ha_configure_script" {
   template = "${file("${path.module}/init.sh.tpl")}"
   vars     = "${local.template_vars}"
 }
-
-resource "null_resource" "config_script_pip_install" {
-  provisioner "remote-exec" {
-    inline = [
-      "guestshell run pip install csr-aws-ha",
-    ]
-  }
-
-  connection {
-    type        = "ssh"
-    user        = "ec2-user"
-    host        = "${local.template_vars.node1_public_ip}"
-    private_key = "${base64decode(var.base64encoded_private_ssh_key)}"
-  }
-
-  depends_on = ["null_resource.config_script"]
-}
