@@ -18,7 +18,10 @@ ip address ${node1_eth1_private} 255.255.255.0
 end
 EOF
 
-ssh -i csr.pem -o ServerAliveCountMax=10 -o ServerAliveInterval=120 -o LogLevel=DEBUG3 -o StrictHostKeyChecking=no ec2-user@${node1_public_ip} guestshell run pip install csr-aws-ha --user
+ssh -i csr.pem -o ServerAliveCountMax=10 -o ServerAliveInterval=120 -o LogLevel=DEBUG3 -o StrictHostKeyChecking=no ec2-user@${node1_public_ip} << EOF
+guestshell run bash
+pip install csr-aws-ha
+exit
 
 ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${node1_public_ip} << EOF
 configure terminal
