@@ -1,7 +1,8 @@
 resource "aws_iam_instance_profile" "csr1000v" {
-  count = var.csr1000v_instance_profile
-  name  = "csr1000v"
-  role  = "${aws_iam_role.csr_role[0].name}"
+  count = "${var.csr1000v_instance_profile != "" ? 1 : 0}"
+
+  name = "csr1000v"
+  role = "${aws_iam_role.csr_role[0].name}"
 }
 
 resource "aws_iam_policy" "csrpolicy" {
