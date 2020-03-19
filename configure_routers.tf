@@ -33,12 +33,6 @@ data "template_file" "ha_configure_script" {
 }
 
 resource "null_resource" "config_script_pip_install" {
-  # Changes to any instance of interfaces
-  triggers = {
-    vars     = "${jsonencode(local.template_vars)}"
-    template = "${data.template_file.ha_configure_script.rendered}"
-  }
-
   provisioner "remote-exec" {
     inline = [
       "guestshell run pip install csr-aws-ha",
