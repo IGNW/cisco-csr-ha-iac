@@ -31,3 +31,12 @@ data "template_file" "ha_configure_script" {
   template = "${file("${path.module}/init.sh.tpl")}"
   vars     = "${local.template_vars}"
 }
+
+locals {
+  output_script = <<EOF
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${local.template_vars.node1_public_ip} guestshell run pip install csr-aws-ha
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${local.template_vars.node2_public_ip} guestshell run pip install csr-aws-ha
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${local.template_vars.node1_public_ip} guestshell run create_node -i 2 -t ${aws_route_table.private.id} -rg us-west-2 -n ${local.template_vars.node1_eth1_eni}
+ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${local.template_vars.node2_public_ip} guestshell run create_node -i 2 -t ${aws_route_table.private.id} -rg us-west-2 -n ${local.template_vars.node2_eth1_eni}
+EOF
+}
