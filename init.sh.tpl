@@ -26,6 +26,7 @@ crypto isakmp policy 1
 encr aes 256
 authentication pre-share
 crypto isakmp key cisco address 0.0.0.0
+echo
 end
 
 configure terminal
