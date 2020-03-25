@@ -32,9 +32,25 @@ data "template_file" "ha_configure_script" {
   vars     = "${local.template_vars}"
 }
 
+resource "local_file" "foo" {
+  content  = <<-EOF
+    ## Please paste this into your machine and run. Terraform cannot run this script, it must be run by a user
+    ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${local.template_vars.node1_public_ip} guestshell run pip install csr-aws-ha --user
+    ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${local.template_vars.node2_public_ip} guestshell run pip install csr-aws-ha --user
+    ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${local.template_vars.node1_public_ip} guestshell run create_node -i 1 -t ${aws_route_table.private.id} -rg us-west-2 -n ${local.template_vars.node1_eth1_eni}
+    ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${local.template_vars.node2_public_ip} guestshell run create_node -i 2 -t ${aws_route_table.private.id} -rg us-west-2 -n ${local.template_vars.node2_eth1_eni}
+    EOF
+  filename = "${path.module}/generated_enable_ha.sh"
+}
+
+data "template_file" "ha_configure_script" {
+  template = "${file("${path.module}/init.sh.tpl")}"
+  vars     = "${local.template_vars}"
+}
+
 locals {
   output_script = <<EOF
-\n
+## Please paste this into your machine and run. Terraform cannot run this script, it must be run by a user
 ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${local.template_vars.node1_public_ip} guestshell run pip install csr-aws-ha --user
 ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${local.template_vars.node2_public_ip} guestshell run pip install csr-aws-ha --user
 ssh -i csr.pem -o StrictHostKeyChecking=no ec2-user@${local.template_vars.node1_public_ip} guestshell run create_node -i 1 -t ${aws_route_table.private.id} -rg us-west-2 -n ${local.template_vars.node1_eth1_eni}
