@@ -43,10 +43,6 @@ resource "local_file" "foo" {
   filename = "${path.module}/generated_enable_ha.sh"
 }
 
-data "template_file" "ha_configure_script" {
-  template = "${file("${path.module}/init.sh.tpl")}"
-  vars     = "${local.template_vars}"
-}
 
 locals {
   output_script = <<EOF
