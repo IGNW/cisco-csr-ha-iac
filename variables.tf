@@ -129,4 +129,6 @@ variable "csr1000v_instance_profile" {
 }
 
 variable "aws_ssh_keypair_name" {
+  default     = null
+  description = "Name of ssh key pair you are putting into aws"
 }

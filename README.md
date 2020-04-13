@@ -3,6 +3,9 @@
 Terraform module which creates an HA Pair of two CSR 1000V soft switches in AWS.
 <br>[AWS CSR 1000V Marketplace Document](https://aws.amazon.com/marketplace/pp/B00OCG4Q4E)
 
+### IMPORTANT!
+This terraform module output a series of generated commands that require being run, you will have to have the ssh key you provided named csr.pem in the directory in which you run these scripts. Terraform could not run these due to the CSR ami handing the ssh session over to a telnet session.
+
 ## Usage
 
 ```hcl
@@ -38,6 +41,7 @@ module CSRV_HA {
 | aws\_region | Region for aws | string | `"us-west-2"` | no |
 | base64encoded\_ssh\_private\_key | base64 encoded private key to use for terraform to connect to the router | string | n/a | yes |
 | base64encoded\_ssh\_public\_key | base64 encoded public key to use for terraform to connect to the router | string | n/a | yes |
+| aws\_ssh\_keypair\_name | Name of ssh key pair you are putting into aws | string | `<string>` | yes |
 | csr1000v\_ami\_filter | Filter to find best match of image | string | `"cisco-CSR-.16.12.01a-AX-HVM-9f5a4516-a4c3-4cf1-89d4-105d2200230e-ami-0f6fdba70c4443b5f.4"` | no |
 | csr1000v\_instance\_profile | Only for using existing instance profiles to pass to the csr1000v ha module, or when using multiple instances of this module | string | n/a | no |
 | instance\_type | Machine size of the routers | string | `"c4.large"` | no |
@@ -58,6 +62,7 @@ module CSRV_HA {
 | ssh\_ingress\_cidr\_block | Address block from which ssh is allowed | list(string) | `<list>` | no |
 | tunnel1\_subnet\_ip\_and\_mask | The address of the tunnel and the subnet mask | string | `"192.168.101.0 0.0.0.255"` | no |
 
+
 ## Outputs
 
 | Name | Description |
@@ -75,4 +80,4 @@ Module managed by [IGNW](https://github.com/ignw).
 
 ## License
 
-Apache 2 Licensed. See LICENSE for full details.
+kpache 2 Licensed. See LICENSE for full details.
