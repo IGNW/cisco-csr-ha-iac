@@ -127,3 +127,6 @@ variable "csr1000v_instance_profile" {
   default     = null
   description = "Only for using existing instance profiles to pass to the csr1000v ha module, or when using multiple instances of this module"
 }
+
+variable "aws_ssh_keypair_name" {
+}

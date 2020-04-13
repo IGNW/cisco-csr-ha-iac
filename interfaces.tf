@@ -1,10 +1,10 @@
 resource "aws_network_interface" "csr1000v1eth1" {
-  subnet_id         = "${aws_subnet.private1.id}"
-  security_groups   = ["${module.security_group_inside.this_security_group_id}"]
-  private_ips       = ["${var.node1_eth1_private_ip}"]
+  subnet_id         = aws_subnet.private1.id
+  security_groups   = [module.security_group_inside.this_security_group_id]
+  private_ips       = [var.node1_eth1_private_ip]
   source_dest_check = false
   attachment {
-    instance     = join("", "${module.instance1.id}")
+    instance     = join("", module.instance1.id)
     device_index = 1
   }
 }
