@@ -20,3 +20,8 @@ module CSRV_HA {
   public_security_group_ingress_rules       = ["https-443-tcp", "http-80-tcp", "all-icmp"]
   instance_type                             = "t2.nano"
 }
+
+
+output "output_script" {
+  value = module.CSRV_HA.output_script
+}
